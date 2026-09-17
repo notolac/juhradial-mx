@@ -288,6 +288,7 @@ SUPPORTED_DES = [
     ("kde", "KDE Plasma"),
     ("gnome", "GNOME"),
     ("cosmic", "COSMIC"),
+    ("omarchy", "Omarchy"),
     ("generic", "Generic / Other"),
 ]
 
@@ -320,6 +321,13 @@ DE_COMMAND_MAP = {
         "emoji": ("exec", "ibus emoji"),
         "lock": ("exec", "loginctl lock-session"),
     },
+    "omarchy": {
+        "screenshot": ("exec", "omarchy capture screenshot"),
+        "files": ("exec", "omarchy launch nautilus"),
+        "new_note": ("exec", "omarchy launch editor"),
+        "emoji": ("exec", "ibus emoji"),
+        "lock": ("exec", "loginctl lock-session"),
+    },
 }
 
 
@@ -341,6 +349,8 @@ def apply_de_defaults_to_slices(slices, de_key):
 def detect_desktop_environment():
     """Auto-detect current desktop environment from XDG_CURRENT_DESKTOP."""
     import os
+    if _is_omarchy():
+        return "omarchy"
     desktop = os.environ.get("XDG_CURRENT_DESKTOP", "").upper()
     if "COSMIC" in desktop:
         return "cosmic"
@@ -349,6 +359,21 @@ def detect_desktop_environment():
     if "GNOME" in desktop:
         return "gnome"
     return "generic"
+
+
+def _is_omarchy():
+    """True on Omarchy (os-release ID=omarchy or OMARCHY_PATH)."""
+    import os
+    if os.environ.get("OMARCHY_PATH"):
+        return True
+    try:
+        with open("/etc/os-release", encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("ID=") and line.split("=", 1)[1].strip().strip('"') == "omarchy":
+                    return True
+    except OSError:
+        pass
+    return False
 
 
 def get_de_key(configured_de):
