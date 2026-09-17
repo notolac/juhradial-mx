@@ -523,9 +523,18 @@ build_project() {
     log_info "Compiling Rust daemon..."
     cd "$INSTALL_DIR"
 
+    # Agent/sandbox shells may export CARGO_TARGET_DIR elsewhere; the installer
+    # copies daemon/target/release/juhradiald from $INSTALL_DIR.
+    export CARGO_TARGET_DIR="$INSTALL_DIR/daemon/target"
+
     cd daemon
     cargo build --release
     cd ..
+
+    if [ ! -x "$CARGO_TARGET_DIR/release/juhradiald" ]; then
+        log_error "Daemon binary missing at $CARGO_TARGET_DIR/release/juhradiald"
+        exit 1
+    fi
 
     log_success "Build complete"
 }
@@ -533,9 +542,10 @@ build_project() {
 # ── Install files ────────────────────────────────────────────────────
 install_files() {
     step "Installing files"
+    cd "$INSTALL_DIR"
 
     # Install daemon binary
-    sudo install -Dm755 daemon/target/release/juhradiald "$BIN_DIR/juhradiald"
+    sudo install -Dm755 "$INSTALL_DIR/daemon/target/release/juhradiald" "$BIN_DIR/juhradiald"
     log_success "Daemon binary"
 
     # Install overlay scripts
