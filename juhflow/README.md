@@ -1,5 +1,7 @@
 # JuhFlow - macOS Companion for JuhRadial MX
 
+> **Upstream companion.** `JuhFlow.dmg` is a binary from [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx). It is **not** part of this fork’s Omarchy 4 goal. Flow stays off by default; do not bind it on the LAN unless you mean to.
+
 Cross-machine cursor flow between macOS and Linux with MX Master 4 Easy-Switch automation.
 
 ## What It Does

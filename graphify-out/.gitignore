@@ -1,0 +1,6 @@
+# Graphify sidecars (cache, wiki, snapshots) stay local.
+*
+!.gitignore
+!graph.json
+!GRAPH_REPORT.md
+!graph.html

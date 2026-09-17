@@ -1,40 +1,76 @@
 # Installation
 
-JuhRadial MX builds from source on every supported distribution. The fastest path is the one-line installer, which detects your distro, pulls the right packages, compiles the Rust daemon, and wires up autostart and device permissions for you. Manual and NixOS paths are documented below for people who prefer to drive each step themselves.
+> **Fork no oficial.** [notolac/juhradial-mx](https://github.com/notolac/juhradial-mx) — no es JuhLabs. Original: [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx) (GPL-3). **No uses `curl | bash`.**
+
+JuhRadial MX se construye desde el fuente. En este fork el camino recomendado es **clonar + `./install.sh` local**, o los pasos manuales. El script detecta la familia de distro (`omarchy` cuenta como Arch: `ID=omarchy`, `ID_LIKE=arch`), pide confirmación en `/dev/tty`, y usa `sudo` solo en paquetes y rutas de sistema.
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/assets/github/githubheader.png" width="100%" alt="JuhRadial MX">
 </div>
 
 !!! note
-    JuhRadial MX targets Wayland first (KDE Plasma 6, GNOME, Hyprland, COSMIC, Sway, niri) and also runs on X11. See [Compositor-Support](compositor-support.md) for per-compositor behaviour, and [Features](features.md) for what you get once it is running.
+    JuhRadial MX apunta primero a Wayland (KDE Plasma 6, GNOME, Hyprland, COSMIC, Sway, niri) y también corre en X11. En **Omarchy 4** Hyprland es Lua 0.56: ver [Compositor-Support](compositor-support.md) y [packaging/omarchy/](../packaging/omarchy/). El overlay en Wayland se coloca con **XWayland**; no lo “arregles” reescribiendo el overlay.
 
 
 ## Contents
 
-- [Quick start: the one-line installer](#quick-start-the-one-line-installer)
+- [Quick start: clone + local script](#quick-start-clone--local-script)
+- [Omarchy 4](#omarchy-4)
 - [What the installer does](#what-the-installer-does)
 - [Requirements](#requirements)
 - [Manual installation per distro](#manual-installation-per-distro)
   - [Fedora](#fedora)
   - [Ubuntu / Debian](#ubuntu-debian)
-  - [Arch Linux](#arch-linux)
+  - [Arch Linux / Omarchy](#arch-linux--omarchy)
   - [openSUSE Tumbleweed](#opensuse-tumbleweed)
   - [NixOS (flake)](#nixos-flake)
 - [Build from source](#build-from-source)
 - [Updating](#updating)
 - [After installing](#after-installing)
 
-## Quick start: the one-line installer
+## Quick start: clone + local script
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install.sh | bash
+git clone https://github.com/notolac/juhradial-mx.git
+cd juhradial-mx
+./install.sh
 ```
 
-The script is interactive: it prints a summary of your system (distro, kernel, session, desktop, whether a Logitech receiver is detected) and asks you to confirm before it changes anything.
+El script es interactivo: imprime distro, kernel, sesión, escritorio y si hay un receptor Logitech, y pide confirmación **antes** de cambiar nada (`read` desde `/dev/tty`).
 
 !!! warning
-    Do not run the installer as `root` or under `sudo`. It refuses to run as root and asks for `sudo` only on the individual steps that need it (package install, copying files into `/usr/local` and `/usr/share`, installing udev rules). The systemd service and config live in your user account, so it must run as your normal user.
+    No ejecutes el instalador como `root` ni con `sudo` envolviendo todo el script. Rehúsa correr como root y pide `sudo` solo en los pasos que lo necesitan (paquetes, `/usr/local`, `/usr/share`, udev). El servicio systemd y la config viven en tu usuario.
+
+
+## Omarchy 4
+
+Este fork está pensado para Omarchy 4 + Hyprland 0.56 (config Lua). **Todavía no instales en el host** hasta que lo pidas explícitamente.
+
+1. Dependencias con el gestor de Omarchy (paquetes en `extra/`):
+
+```bash
+omarchy pkg add rust python-pyqt6 qt6-svg python-gobject gtk4 libadwaita \
+  gtk4-layer-shell python-cryptography dbus systemd-libs libevdev hidapi \
+  ydotool git make base-devel
+```
+
+El `install.sh` puede usar `pacman --needed` (con el prompt que ya tiene). No es un `--noconfirm` silencioso sin confirmación previa.
+
+2. Corre `./install.sh` como usuario `notolac` (no root). En Omarchy **no** escribe `windowrulev2` ni asume `hyprland.conf`. Copia el snippet a `~/.config/hypr/juhradial-hyprland.lua` e imprime el bloque a pegar al final de `hyprland.lua`. No edita `hyprland.lua` a ciegas.
+
+3. Añade al final de `~/.config/hypr/hyprland.lua`:
+
+```lua
+dofile(os.getenv("HOME") .. "/.config/hypr/juhradial-hyprland.lua")
+```
+
+Snippet: [packaging/omarchy/juhradial-hyprland.lua](../packaging/omarchy/juhradial-hyprland.lua). Luego, **cuando apliques config**: `hyprctl reload` y `hyprctl configerrors`.
+
+4. Grupo `input`: tras `usermod -aG input`, **logout o reboot**. `systemctl --user restart` **no** basta (el user manager no relee PAM).
+
+5. udev (`hidraw` + `uinput`) y `ydotool` inyectan teclas. Es privilegio; no lo “endurezcas” sin una tarea explícita. Flow sigue apagado por defecto.
+
+El PKGBUILD en [packaging/arch/](../packaging/arch/PKGBUILD) es experimental (metadatos del fork). **No se publica a AUR.**
 
 
 ## What the installer does
@@ -43,12 +79,12 @@ The installer (`install.sh`) runs as a fresh install or an in-place upgrade, dep
 
 | Phase | What happens |
 |-------|--------------|
-| Detect | Reads `/etc/os-release` to resolve a distro family (`arch`, `fedora`, `debian`, `opensuse`), falling back to `ID_LIKE` and then to the available package manager (`pacman`, `apt-get`, `dnf`, `zypper`). Detects Wayland vs X11, the desktop/compositor, an existing install, and whether a Logitech device (USB vendor `046d`) is present. |
+| Detect | Reads `/etc/os-release` (`ID=omarchy` and `ID_LIKE=arch` count as Arch). Falls back to the package manager (`pacman`, `apt-get`, `dnf`, `zypper`). Detects Wayland vs X11, the desktop/compositor (Hyprland Lua vs legacy `.conf`), an existing install, and whether a Logitech device (USB vendor `046d`) is present. |
 | 1. Dependencies | Installs the build and runtime packages for your distro family (Rust/Cargo, Python + PyQt6, GTK4/libadwaita, `gtk4-layer-shell`, HID and evdev dev headers, D-Bus/systemd dev headers, `ydotool`, `git`, `make`). |
-| 2. Fetch source | Clones `https://github.com/JuhLabs/juhradial-mx` into `/opt/juhradial-mx` (or, on upgrade, `git fetch` + `git reset --hard origin/master` + `git clean -fd`). |
+| 2. Fetch source | Prefers the local clone that contains `install.sh`. Otherwise clones `https://github.com/notolac/juhradial-mx` into `/opt/juhradial-mx` (upgrade of a git checkout there still `fetch` + hard reset — do not do that to your fork worktree). |
 | 3. Build daemon | Ensures a usable Rust toolchain (see the rustup note below), then runs `cargo build --release` in `daemon/`. |
 | 4. Install files | Copies the daemon binary, overlay scripts, theme/device assets, launcher scripts, desktop entries, icons, the systemd user unit, and udev rules into place (see layout table). |
-| 5. Desktop integration | Applies compositor-specific setup (Hyprland window rules, GNOME cursor-helper extension). KDE, Sway, and COSMIC need no extra config. |
+| 5. Desktop integration | Omarchy / Hyprland Lua: copies `packaging/omarchy/juhradial-hyprland.lua` and prints the `dofile` block — does **not** write `windowrulev2` or edit `hyprland.lua` blindly. GNOME still gets the cursor-helper extension. KDE, Sway, and COSMIC need no extra config. |
 | 6. Enable service | Reloads the systemd user manager, enables `juhradialmx-daemon`, sets up `ydotoold` autostart, then starts (or restarts) the daemon. |
 
 ### Install layout
@@ -74,7 +110,7 @@ For non-root access to the mouse and for action injection, the installer:
 - Ensures the `input` group exists and adds your user to it (device access via hidraw/evdev comes from `GROUP="input"`).
 
 !!! info
-    If your user was just added to the `input` group, log out and back in for the new group membership to take effect. Until then the daemon cannot open the device.
+    If your user was just added to the `input` group, **log out and back in, or reboot**. `systemctl --user restart` / `daemon-reload` do **not** pick up the new group. Until then the daemon cannot open the device.
 
 
 ### ydotoold (Wayland action injection)
@@ -106,7 +142,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --defaul
 
 ## Manual installation per distro
 
-Each manual path is: install dependencies, clone, build the daemon, then run. To get autostart, udev rules, the `input` group, and `ydotoold` set up exactly as the one-line installer does, prefer the installer or replicate the steps in [What the installer does](#what-the-installer-does).
+Each manual path is: install dependencies, clone, build the daemon, then run. To get autostart, udev rules, the `input` group, and `ydotoold` set up exactly as the local installer does, prefer `./install.sh` from a clone (never `curl | bash`) or replicate the steps in [What the installer does](#what-the-installer-does).
 
 ### Fedora
 
@@ -151,12 +187,22 @@ sudo apt-get install -y libgtk4-layer-shell0
     On Ubuntu 24.04 the distro Rust (1.75) is too old for the committed lockfile. Bootstrap rustup as shown in [The rustup bootstrap](#the-rustup-bootstrap) before building.
 
 
-### Arch Linux
+### Arch Linux / Omarchy
 
-Family also covers Manjaro, EndeavourOS, Garuda, Artix, CachyOS, ArcoLinux, Archcraft.
+Family also covers Omarchy (`ID=omarchy`, `ID_LIKE=arch`), Manjaro, EndeavourOS, Garuda, Artix, CachyOS, ArcoLinux, Archcraft.
+
+En **Omarchy**, preferir:
 
 ```bash
-sudo pacman -S --noconfirm --needed \
+omarchy pkg add rust python-pyqt6 qt6-svg python-gobject gtk4 libadwaita \
+  gtk4-layer-shell python-cryptography dbus systemd-libs libevdev hidapi \
+  ydotool git make base-devel
+```
+
+Con `pacman` (el instalador usa `--needed` tras el prompt interactivo):
+
+```bash
+sudo pacman -S --needed \
     rust \
     python python-pip \
     python-pyqt6 qt6-svg \
@@ -232,7 +278,7 @@ nix develop github:JuhLabs/juhradial-mx
 If you want to build and run without a full system install:
 
 ```bash
-git clone https://github.com/JuhLabs/juhradial-mx.git
+git clone https://github.com/notolac/juhradial-mx.git
 cd juhradial-mx
 
 # Build the Rust daemon
@@ -242,7 +288,7 @@ cd daemon && cargo build --release && cd ..
 ./scripts/juhradial-mx.sh
 ```
 
-The daemon binary lands at `daemon/target/release/juhradiald`. You still need the runtime dependencies for your distro (PyQt6, GTK4/libadwaita, `ydotool`) and, for non-root device access, the udev rules and `input` group membership described above. For a full system install identical to the one-line path, run `install.sh` from the cloned tree.
+The daemon binary lands at `daemon/target/release/juhradiald`. You still need the runtime dependencies for your distro (PyQt6, GTK4/libadwaita, `ydotool`) and, for non-root device access, the udev rules and `input` group membership described above. For a full system install, run `./install.sh` from the cloned tree — not `curl | bash`.
 
 To run the daemon directly with verbose logging while debugging, see [Troubleshooting](troubleshooting.md):
 
@@ -252,10 +298,12 @@ To run the daemon directly with verbose logging while debugging, see [Troublesho
 
 ## Updating
 
-Re-run the same one-line command. When `/opt/juhradial-mx` already exists, the installer switches to upgrade mode: it fetches the latest `master`, hard-resets the source tree, rebuilds the daemon, reinstalls files and udev rules, and restarts the running service.
+Re-run `./install.sh` from an updated clone of **this fork**. Do not `curl | bash` the upstream script over a fork install. When `/opt/juhradial-mx` already exists as a git checkout, the installer may hard-reset that tree — keep fork development in your worktree (`~/Work/Personal/juhradial-mx`), not in `/opt`.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install.sh | bash
+cd juhradial-mx
+git pull
+./install.sh
 ```
 
 On NixOS, update the flake input and rebuild:
@@ -285,7 +333,7 @@ journalctl --user -u juhradialmx-daemon -f
 ```
 
 !!! info
-    Two cases need a session restart (log out and back in): first time your user is added to the `input` group, and on GNOME for the cursor-helper Shell extension to load. If the menu appears at the top-left corner on GNOME, this is why.
+    Two cases need a session restart (log out and back in, or reboot): first time your user is added to the `input` group (`systemctl --user restart` is **not** enough), and on GNOME for the cursor-helper Shell extension to load. If the menu appears at the top-left corner on GNOME, this is why.
 
 
 If the menu does not appear or the mouse is not detected, head to [Troubleshooting](troubleshooting.md). For how the daemon, overlay, and settings app fit together, see [Architecture](architecture.md). Return to [Home](index.md) for the full page index.

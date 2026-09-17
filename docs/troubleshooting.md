@@ -1,5 +1,7 @@
 # Troubleshooting
 
+> **Fork no oficial.** Issues de empaquetado Omarchy: [notolac/juhradial-mx](https://github.com/notolac/juhradial-mx/issues). Bugs del producto original: [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx/issues). No uses `curl | bash`.
+
 Practical fixes for the most common JuhRadial MX problems, written as **problem -> cause -> fix**. Most issues fall into one of six buckets: the daemon will not build, the mouse is not detected, the daemon is not running, the menu shows up in the wrong place, button or thumb-wheel actions do nothing, or haptics and battery are missing.
 
 If you only read one thing: collect the diagnostics below first, then jump to the matching section.
@@ -40,11 +42,12 @@ Run these first. The output tells you which section you need.
 
 **Cause.** The committed `Cargo.lock` is lockfile format v4, which needs `cargo >= 1.78`, and one dependency (`toml_edit`) needs `rustc >= 1.76`. Distro Rust packages are frequently older: Ubuntu 24.04 ships `1.75`. A too-old `cargo` produces lockfile or edition errors before anything compiles.
 
-**Fix.** Install an up-to-date toolchain with `rustup`. The one-line installer does this automatically when it detects a `cargo` older than `1.78`, but for a manual build do it yourself:
+**Fix.** Install an up-to-date toolchain with `rustup` (or on Omarchy, `omarchy pkg add rust` — Arch `extra/rust` is new enough). For a manual build:
 
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --profile minimal
-. "$HOME/.cargo/env"
+# Prefer distro rust on Arch/Omarchy. rustup only if cargo is older than 1.78:
+# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --profile minimal
+# . "$HOME/.cargo/env"
 cargo --version          # confirm 1.78 or newer
 cd daemon && cargo build --release
 ```
@@ -90,12 +93,12 @@ sudo install -Dm644 packaging/udev/99-juhradialmx.rules /etc/udev/rules.d/99-juh
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
-# 3. Join the input group, then LOG OUT and back in (group changes need a fresh session):
+# 3. Join the input group, then LOG OUT / REBOOT (group changes need a fresh session):
 sudo usermod -aG input "$USER"
 ```
 
 !!! warning
-    Adding yourself to a group does not affect already-running sessions. You must log out and back in (or reboot). Verify afterwards with `id -nG | grep input`.
+    Adding yourself to a group does not affect already-running sessions. You must **log out and back in, or reboot**. `systemctl --user restart` / `daemon-reload` are **not** enough. Verify afterwards with `id -nG | grep -x input`.
 
 
 ### Problem: a USB-cabled or receiver mouse works, but the same mouse over Bluetooth is invisible
@@ -178,11 +181,7 @@ If it is installed but not `ACTIVE`, log out and back in (or restart the session
 
 **Cause.** Coordinate-space mismatch under fractional scaling. The daemon reads the cursor in **logical** pixels, while the overlay (forced onto XWayland, where Qt6 high-DPI scaling is on) places windows in **point** space (physical pixels divided by the device pixel ratio). Feeding a logical coordinate straight into the overlay overshoots in proportion to distance from the monitor's top-left corner.
 
-**Fix.** This is handled in current builds by dividing the cursor coordinate by the cursor screen's `devicePixelRatio` (with `dpr = 1` as the identity case). If you see the drift, you are on an older build: update to the latest release. Confirm your scale with your display settings; the symptom is strongest at 125 percent, 150 percent, and similar.
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install.sh | bash
-```
+**Fix.** Update from a clone of this fork (`git pull` then rebuild). Do not `curl | bash` an installer over the network.
 
 ### Problem: the menu opens on the wrong monitor in a multi-display setup
 
@@ -194,18 +193,22 @@ curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install
 
 **Cause.** Without window rules, Hyprland tiles or stacks the overlay like a normal window.
 
-**Fix.** Add the overlay rules (the installer does this automatically on Hyprland). In `hyprland.conf` or a sourced rules file:
+**Fix.** Add the overlay rules. On **Omarchy 4 / Hyprland 0.56** use Lua (`o.window`), never `windowrulev2`, and never `hyprland.conf` (Omarchy does not load it):
 
-```conf
-windowrulev2 = float,    title:^(JuhRadial MX)$
-windowrulev2 = noblur,   title:^(JuhRadial MX)$
-windowrulev2 = noborder, title:^(JuhRadial MX)$
-windowrulev2 = noshadow, title:^(JuhRadial MX)$
-windowrulev2 = pin,      title:^(JuhRadial MX)$
-windowrulev2 = noanim,   title:^(JuhRadial MX)$
+```lua
+o.window({ title = "^JuhRadial MX$" }, {
+  tag = "-default-opacity",
+  float = true,
+  pin = true,
+  no_blur = true,
+  no_shadow = true,
+  border_size = 0,
+  no_anim = true,
+  opacity = "1 1",
+})
 ```
 
-Then `hyprctl reload`. See [Compositor-Support](compositor-support.md) for other compositors.
+Paste at the end of `~/.config/hypr/hyprland.lua` or `dofile` [packaging/omarchy/juhradial-hyprland.lua](../packaging/omarchy/juhradial-hyprland.lua). Then `hyprctl reload` and `hyprctl configerrors`. See [Compositor-Support](compositor-support.md).
 
 ### Problem: the menu never appears on niri
 
@@ -321,15 +324,12 @@ Re-plugging the dongle also forces a reconnect on older builds. If `ps -ef | gre
 
 ## Still stuck
 
-1. Re-run the installer to pull the latest fixes:
-   ```bash
-   curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install.sh | bash
-   ```
+1. Re-run `./install.sh` from an updated clone of this fork (never `curl | bash`).
 2. Capture a verbose run and the service logs:
    ```bash
    systemctl --user stop juhradialmx-daemon
    /usr/local/bin/juhradiald --verbose 2>&1 | tee juhradial-debug.log
    ```
-3. Open an issue at <https://github.com/JuhLabs/juhradial-mx/issues> with your distro, compositor (and display scale), the device and connection type (USB receiver vs Bluetooth), and that log.
+3. Open an issue at <https://github.com/notolac/juhradial-mx/issues> (this fork) or <https://github.com/JuhLabs/juhradial-mx/issues> (upstream product) with your distro, compositor (and display scale), the device and connection type (USB receiver vs Bluetooth), and that log.
 
 Related pages: [Installation](installation.md) · [Configuration](configuration.md) · [Compositor-Support](compositor-support.md) · [Features](features.md) · [FAQ](faq.md) · [Architecture](architecture.md) · [Home](index.md)

@@ -1,30 +1,41 @@
+> [!IMPORTANT]
+> **Fork no oficial.** Estas páginas documentan el fork de [notolac/juhradial-mx](https://github.com/notolac/juhradial-mx) para Omarchy / aprendizaje. **No es JuhLabs.** El original es [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx) ([GPL-3.0](https://github.com/JuhLabs/juhradial-mx/blob/master/LICENSE)). Wiki oficial de JuhLabs: https://juhlabs.github.io/juhradial-mx/ (no este repo).
+
 <div align="center">
   <img src="https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/assets/juhradial-mx.svg" width="120" alt="JuhRadial MX">
-  <h1>JuhRadial MX Wiki</h1>
-  <p><strong>The ultimate Logitech MX Master experience on Linux</strong></p>
+  <h1>JuhRadial MX (fork no oficial)</h1>
+  <p><strong>Código de JuhLabs, empaquetado aquí para Omarchy 4 / aprendizaje.</strong></p>
   <p>
     <code>Radial Menu</code> &nbsp;&middot;&nbsp; <code>Thumb-Wheel</code> &nbsp;&middot;&nbsp; <code>Per-App Profiles</code> &nbsp;&middot;&nbsp; <code>Haptics</code> &nbsp;&middot;&nbsp; <code>Easy-Switch</code> &nbsp;&middot;&nbsp; <code>Flow</code>
   </p>
 </div>
 
-Welcome. JuhRadial MX brings the full Logitech MX Master experience to Linux, native on Wayland: a radial gesture menu, haptic feedback, button and thumb-wheel remapping, per-application profiles, Easy-Switch, and cross-computer Flow. This wiki is the complete guide.
+Bienvenido. JuhRadial MX (proyecto original de JuhLabs) lleva la experiencia MX Master a Linux en Wayland. Este fork no reescribe el producto; añade integración Omarchy 4 / Hyprland 0.56 y deja claro que no es el repo oficial.
 
-## Quick install
+## Instalación (este fork)
+
+**No uses `curl | bash`.** Clona y ejecuta el script local, o sigue los pasos manuales.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install.sh | bash
+git clone https://github.com/notolac/juhradial-mx.git
+cd juhradial-mx
+# Omarchy:
+omarchy pkg add rust python-pyqt6 qt6-svg python-gobject gtk4 libadwaita \
+  gtk4-layer-shell python-cryptography dbus systemd-libs libevdev hidapi \
+  ydotool git make base-devel
+./install.sh
 ```
 
-The installer detects your distro, installs dependencies, builds from source, and sets up autostart. Full steps and per-distro notes: [Installation](installation.md).
+Pasos, Hyprland Lua y notas por distro: [Installation](installation.md). El overlay en Wayland se coloca con **XWayland**; no es un bug a “arreglar” reescribiendo el overlay.
 
 ## Explore
 
 | Page | What's there |
 |------|--------------|
-| [Installation](installation.md) | One-line install, per-distro steps, build from source, updating |
+| [Installation](installation.md) | Clone + local `./install.sh`, Omarchy, per-distro steps, build from source |
 | [Features](features.md) | Radial menu, remapping, thumb-wheel, haptics, Easy-Switch, Flow, gaming, macros |
 | [Configuration](configuration.md) | `config.json` reference, themes, per-application profiles |
-| [Compositor Support\](compositor-support.md) | GNOME, KDE Plasma 6, Hyprland, COSMIC, Sway, niri, X11 |
+| [Compositor Support](compositor-support.md) | GNOME, KDE Plasma 6, Hyprland (Lua on Omarchy 4), COSMIC, Sway, niri, X11 |
 | [Troubleshooting](troubleshooting.md) | Common problems and how to fix them |
 | [Architecture](architecture.md) | How it works, for contributors |
 | [FAQ](faq.md) | Quick answers to common questions |
@@ -42,4 +53,4 @@ SmartShift and hi-res scroll settings now really program the mouse. Earlier buil
 
 ---
 
-New here? Start with [Installation](installation.md), then skim [Features](features.md). Stuck? See [Troubleshooting](troubleshooting.md) or open an [issue](https://github.com/JuhLabs/juhradial-mx/issues).
+New here? Start with [Installation](installation.md), then skim [Features](features.md). Stuck? See [Troubleshooting](troubleshooting.md) or open an [issue on this fork](https://github.com/notolac/juhradial-mx/issues). Upstream issues: [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx/issues).

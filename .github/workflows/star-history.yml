@@ -1,33 +1,18 @@
+# Star-history chart refresh is an **upstream JuhLabs** marketing workflow.
+# Disabled on this unofficial fork so we do not overwrite assets or push
+# charts as if they belonged to the official project.
 name: Star History
 
 on:
-  schedule:
-    - cron: "17 4 * * 1"
   workflow_dispatch:
 
 permissions: {}
 
 jobs:
   render:
+    if: false
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Render chart
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python3 scripts/render-star-history.py
-
-      - name: Commit if changed
-        run: |
-          if git diff --quiet assets/github/star-history.svg; then
-            echo "chart unchanged"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/github/star-history.svg
-          git commit -m "chore: refresh star-history chart"
-          git push
+      - run: echo "Disabled on the notolac fork. Upstream: JuhLabs/juhradial-mx"

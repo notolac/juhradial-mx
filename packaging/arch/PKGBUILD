@@ -1,56 +1,55 @@
-# Maintainer: JuhLabs (Julian Hermstad) <juhlabs@example.com>
-# Arch Linux PKGBUILD for JuhRadial MX
+# Maintainer: notolac <https://github.com/notolac>
+# Unofficial GPL-3 fork of JuhRadial MX for Omarchy / learning.
+# Original: JuhLabs / Julian Hermstad — https://github.com/JuhLabs/juhradial-mx
+# Experimental packaging only. Do NOT publish this PKGBUILD to the AUR.
 
 pkgname=juhradial-mx
-pkgver=0.4.3
+pkgver=0.4.4
 pkgrel=1
-pkgdesc="Beautiful radial menu for Logitech MX Master mice on Linux"
+pkgdesc="Unofficial fork of JuhRadial MX (radial menu for Logitech MX Master) — not JuhLabs"
 arch=('x86_64')
-url="https://github.com/JuhLabs/juhradial-mx"
-license=('GPL3')
+url="https://github.com/notolac/juhradial-mx"
+license=('GPL-3.0-or-later')
 depends=(
     'gtk4'
     'gtk4-layer-shell'
+    'libadwaita'
     'python'
     'python-gobject'
+    'python-pyqt6'
     'python-cairo'
     'python-cryptography'
+    'qt6-svg'
     'dbus'
+    'systemd-libs'
+    'libevdev'
+    'hidapi'
 )
 makedepends=(
     'rust'
     'cargo'
-    'nodejs'
-    'npm'
     'git'
+    'make'
+    'base-devel'
 )
 optdepends=(
-    'ydotool: for cursor capture on Wayland'
+    'ydotool: Wayland keystroke injection (uinput)'
 )
 provides=("$pkgname")
 conflicts=("$pkgname-git")
-source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/heads/master.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-    cd "$pkgname-$pkgver"
+    cd "$pkgname-master"
 
-    # Build Rust daemon
     cd daemon
     cargo build --release --locked
     cd ..
-
-    # Build KWin script (optional)
-    if [ -d "kwin-script" ]; then
-        cd kwin-script
-        npm ci --legacy-peer-deps 2>/dev/null || npm install --legacy-peer-deps
-        npm run build 2>/dev/null || true
-        cd ..
-    fi
 }
 
 package() {
-    cd "$pkgname-$pkgver"
+    cd "$pkgname-master"
 
     # Install daemon binary
     install -Dm755 daemon/target/release/juhradiald "$pkgdir/usr/bin/juhradiald"
@@ -87,8 +86,13 @@ package() {
     install -Dm644 packaging/udev/99-juhradialmx.rules "$pkgdir/usr/lib/udev/rules.d/99-juhradialmx.rules"
     install -Dm644 packaging/udev/60-ydotool-uinput.rules "$pkgdir/usr/lib/udev/rules.d/60-ydotool-uinput.rules"
 
-    # Install license
+    # Hyprland / Omarchy Lua snippet (user copies into ~/.config/hypr/)
+    install -Dm644 packaging/omarchy/juhradial-hyprland.lua \
+        "$pkgdir/usr/share/juhradial/omarchy/juhradial-hyprland.lua"
+
+    # Install license + attribution
     install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    install -Dm644 NOTICE "$pkgdir/usr/share/licenses/$pkgname/NOTICE"
 
     # Install docs
     install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
@@ -96,11 +100,12 @@ package() {
 }
 
 post_install() {
-    echo ">>> To start JuhRadial MX:"
+    echo ">>> Unofficial fork of JuhRadial MX (not JuhLabs)."
+    echo ">>> Original: https://github.com/JuhLabs/juhradial-mx"
+    echo ">>> To start (after udev + input group; then logout/reboot):"
     echo "    systemctl --user enable --now juhradialmx-daemon"
     echo "    juhradial-mx"
-    echo ""
-    echo ">>> Or find 'JuhRadial MX' in your application menu"
+    echo ">>> Omarchy: paste packaging/omarchy/juhradial-hyprland.lua into ~/.config/hypr/hyprland.lua"
 }
 
 post_upgrade() {

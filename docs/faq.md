@@ -71,7 +71,7 @@ Button "diverts" (which let the daemon intercept the gesture and haptic buttons)
 
 ### Does it need root?
 
-No, the daemon runs as your normal user. It needs access to the mouse's `hidraw` node and to `uinput` (for injecting remapped actions), and that access is granted by your user being in the `input` group, set up by the installer's udev rule. The one-line installer uses `sudo` to copy files into system locations during installation, but the running daemon itself does not run as root.
+No, the daemon runs as your normal user. It needs access to the mouse's `hidraw` node and to `uinput` (for injecting remapped actions), and that access is granted by your user being in the `input` group, set up by the installer's udev rule. The installer uses `sudo` to copy files into system locations during installation, but the running daemon itself does not run as root.
 
 ### Is my data private?
 
@@ -153,7 +153,7 @@ rm -rf ~/.config/juhradial
 
 ### How do I update?
 
-Re-run the one-line installer; it rebuilds from the latest source. See [Installation](installation.md) for details.
+Re-run `./install.sh` from an updated clone of this fork (never `curl | bash`); it rebuilds from the source in that tree. See [Installation](installation.md).
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/assets/github/separator.png" width="80%" alt="">

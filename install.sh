@@ -1,15 +1,17 @@
 #!/bin/bash
 #
-# JuhRadial MX Universal Installer
-# https://github.com/JuhLabs/juhradial-mx
+# JuhRadial MX installer — unofficial notolac fork (GPL-3)
+# Original: https://github.com/JuhLabs/juhradial-mx
+# This tree: https://github.com/notolac/juhradial-mx
 #
-# Usage: curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install.sh | bash
+# Usage: clone this repo and run ./install.sh as your normal user.
+# Do NOT curl | bash. Do not run as root.
 #
 # This script will:
-# 1. Detect your Linux distribution
+# 1. Detect your Linux distribution (Omarchy = Arch family)
 # 2. Install required dependencies
-# 3. Clone and build JuhRadial MX
-# 4. Install and enable the systemd service
+# 3. Use the local clone (or clone this fork)
+# 4. Install and enable the systemd user service
 #
 
 set -e
@@ -27,7 +29,9 @@ WHITE='\033[1;37m'
 GRAY='\033[0;90m'
 
 # ── Configuration ────────────────────────────────────────────────────
-REPO_URL="https://github.com/JuhLabs/juhradial-mx"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+REPO_URL="https://github.com/notolac/juhradial-mx"
+UPSTREAM_URL="https://github.com/JuhLabs/juhradial-mx"
 INSTALL_DIR="/opt/juhradial-mx"
 BIN_DIR="/usr/local/bin"
 SYSTEMD_USER_DIR="$HOME/.config/systemd/user"
@@ -53,7 +57,9 @@ print_banner() {
 BANNER
     echo -e "${RESET}"
     echo -e "                       ${CYAN}· Installer${RESET}"
-    echo -e "             ${DIM}Radial menu for MX Master on Linux${RESET}"
+    echo -e "             ${YELLOW}Unofficial fork for Omarchy / learning${RESET}"
+    echo -e "             ${DIM}Not JuhLabs. Original: github.com/JuhLabs/juhradial-mx${RESET}"
+    echo -e "             ${DIM}This tree: github.com/notolac/juhradial-mx  (GPL-3)${RESET}"
     echo ""
 }
 
@@ -116,7 +122,7 @@ resolve_distro_family() {
     DISTRO_FAMILY="$DISTRO"
 
     case "$DISTRO" in
-        arch|manjaro|endeavouros|garuda|artix|cachyos|arcolinux|archcraft)
+        arch|manjaro|endeavouros|garuda|artix|cachyos|arcolinux|archcraft|omarchy)
             DISTRO_FAMILY="arch"
             ;;
         fedora|rhel|centos|rocky|almalinux|nobara|ultramarine)
@@ -173,6 +179,9 @@ check_desktop() {
     if [ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]; then
         DESKTOP_TYPE="hyprland"
         DESKTOP_LABEL="Hyprland"
+    elif [ "${DISTRO:-}" = "omarchy" ] && [ -f "$HOME/.config/hypr/hyprland.lua" ]; then
+        DESKTOP_TYPE="hyprland"
+        DESKTOP_LABEL="Hyprland (Omarchy)"
     elif [ -n "$SWAYSOCK" ] || [ "$XDG_CURRENT_DESKTOP" = "sway" ]; then
         DESKTOP_TYPE="sway"
         DESKTOP_LABEL="Sway"
@@ -288,52 +297,53 @@ print_system_info() {
 }
 
 # ── Hyprland configuration ──────────────────────────────────────────
+hyprland_uses_lua() {
+    [ -f "$HOME/.config/hypr/hyprland.lua" ] || [ "${DISTRO:-}" = "omarchy" ]
+}
+
 configure_hyprland() {
     if [ "$DESKTOP_TYPE" != "hyprland" ]; then
         return 0
     fi
 
-    log_info "Configuring Hyprland window rules..."
+    local snippet_src="" dest="$HOME/.config/hypr/juhradial-hyprland.lua"
+    mkdir -p "$HOME/.config/hypr"
 
-    HYPR_CONFIG_DIR="$HOME/.config/hypr"
-    RULES_CONTENT='
-# ######## JuhRadial MX - Radial Menu Overlay ########
-# These rules ensure the radial menu appears correctly as an overlay
-windowrulev2 = float, title:^(JuhRadial MX)$
-windowrulev2 = noblur, title:^(JuhRadial MX)$
-windowrulev2 = noborder, title:^(JuhRadial MX)$
-windowrulev2 = noshadow, title:^(JuhRadial MX)$
-windowrulev2 = pin, title:^(JuhRadial MX)$
-windowrulev2 = noanim, title:^(JuhRadial MX)$'
+    if [ -f "$INSTALL_DIR/packaging/omarchy/juhradial-hyprland.lua" ]; then
+        snippet_src="$INSTALL_DIR/packaging/omarchy/juhradial-hyprland.lua"
+    elif [ -f "$SCRIPT_DIR/packaging/omarchy/juhradial-hyprland.lua" ]; then
+        snippet_src="$SCRIPT_DIR/packaging/omarchy/juhradial-hyprland.lua"
+    fi
 
-    # Check if rules already exist
-    if grep -q "JuhRadial MX" "$HYPR_CONFIG_DIR"/*.conf "$HYPR_CONFIG_DIR"/**/*.conf 2>/dev/null; then
-        log_dim "Hyprland rules already configured"
+    # Omarchy 4 and Hyprland 0.56: Lua only. Never write windowrulev2 / hyprland.conf.
+    if hyprland_uses_lua; then
+        log_info "Omarchy / Hyprland Lua detected — not writing windowrulev2 or hyprland.conf"
+        if [ -n "$snippet_src" ]; then
+            cp "$snippet_src" "$dest"
+            log_success "Copied overlay snippet to $dest"
+        else
+            log_warning "packaging/omarchy/juhradial-hyprland.lua not found in the tree"
+        fi
+        echo ""
+        echo -e "  ${BOLD}Add this at the end of ~/.config/hypr/hyprland.lua${RESET}"
+        echo -e "  ${DIM}(user override zone). This installer does not edit that file.${RESET}"
+        echo -e "  ${CYAN}dofile(os.getenv(\"HOME\") .. \"/.config/hypr/juhradial-hyprland.lua\")${RESET}"
+        echo ""
+        if [ -n "$snippet_src" ]; then
+            log_dim "Snippet to paste if you prefer inlining:"
+            sed 's/^/  /' "$snippet_src"
+            echo ""
+        fi
+        log_dim "When you apply it: hyprctl reload && hyprctl configerrors"
+        log_dim "Do not use windowrulev2. Do not edit /usr/share/omarchy/."
         return 0
     fi
 
-    # Try dots-hyprland custom rules first (end-4/dots-hyprland structure)
-    if [ -f "$HYPR_CONFIG_DIR/custom/rules.conf" ]; then
-        echo "$RULES_CONTENT" >> "$HYPR_CONFIG_DIR/custom/rules.conf"
-        log_success "Added rules to custom/rules.conf"
-    # Try standard hyprland.conf
-    elif [ -f "$HYPR_CONFIG_DIR/hyprland.conf" ]; then
-        echo "$RULES_CONTENT" >> "$HYPR_CONFIG_DIR/hyprland.conf"
-        log_success "Added rules to hyprland.conf"
-    # Create a new rules file and source it
-    else
-        mkdir -p "$HYPR_CONFIG_DIR"
-        echo "$RULES_CONTENT" > "$HYPR_CONFIG_DIR/juhradial-rules.conf"
-
-        if [ -f "$HYPR_CONFIG_DIR/hyprland.conf" ]; then
-            echo "source=juhradial-rules.conf" >> "$HYPR_CONFIG_DIR/hyprland.conf"
-        fi
-        log_success "Created juhradial-rules.conf"
-    fi
-
-    # Reload Hyprland config if possible
-    if command -v hyprctl &> /dev/null; then
-        hyprctl reload 2>/dev/null && log_dim "Hyprland config reloaded"
+    log_warning "Hyprland without hyprland.lua: windowrulev2 is obsolete on 0.56+."
+    log_dim "Copy packaging/omarchy/juhradial-hyprland.lua into your Hyprland Lua config."
+    if [ -n "$snippet_src" ]; then
+        cp "$snippet_src" "$dest"
+        log_success "Copied $dest for you to include from Lua"
     fi
 }
 
@@ -353,6 +363,11 @@ install_deps_fedora() {
 }
 
 install_deps_arch() {
+    # Confirmation already happened via read from /dev/tty in main().
+    # --noconfirm only after that prompt; --needed skips already-installed pkgs.
+    if command -v omarchy &> /dev/null; then
+        log_dim "Omarchy detected. Docs prefer: omarchy pkg add rust python-pyqt6 qt6-svg python-gobject gtk4 libadwaita gtk4-layer-shell python-cryptography dbus systemd-libs libevdev hidapi ydotool git make base-devel"
+    fi
     sudo pacman -S --noconfirm --needed \
         rust \
         python python-pip \
@@ -440,16 +455,33 @@ clone_repo() {
     uid="$(id -u)"
     gid="$(id -g)"
 
+    # Prefer the local clone that launched this script (clone + ./install.sh).
+    if [ -f "$SCRIPT_DIR/daemon/Cargo.toml" ] && [ -d "$SCRIPT_DIR/overlay" ]; then
+        if [ "$SCRIPT_DIR" = "$INSTALL_DIR" ]; then
+            log_info "Using source tree at $INSTALL_DIR"
+        else
+            log_info "Syncing local clone $SCRIPT_DIR → $INSTALL_DIR"
+            sudo install -d -o "$uid" -g "$gid" "$INSTALL_DIR"
+            tar -C "$SCRIPT_DIR" \
+                --exclude='daemon/target' \
+                --exclude='graphify-out' \
+                --exclude='.git' \
+                -cf - . | tar -C "$INSTALL_DIR" -xf -
+            sudo chown -R "$uid:$gid" "$INSTALL_DIR"
+        fi
+        cd "$INSTALL_DIR"
+        log_success "Source ready (local fork tree)"
+        return 0
+    fi
+
     if [ -d "$INSTALL_DIR/.git" ]; then
-        log_info "Updating existing installation..."
+        log_info "Updating existing installation from git (destructive reset of $INSTALL_DIR)..."
         sudo chown -R "$uid:$gid" "$INSTALL_DIR"
         git -C "$INSTALL_DIR" fetch origin
         git -C "$INSTALL_DIR" reset --hard origin/master
         git -C "$INSTALL_DIR" clean -fd
     else
-        log_info "Cloning repository..."
-        # A previous failed install can leave a partial, root-owned dir behind;
-        # clear it so the clone starts clean and ends up owned by the user.
+        log_info "Cloning fork $REPO_URL (upstream is $UPSTREAM_URL)..."
         [ -e "$INSTALL_DIR" ] && sudo rm -rf "$INSTALL_DIR"
         sudo install -d -o "$uid" -g "$gid" "$INSTALL_DIR"
         git clone "$REPO_URL" "$INSTALL_DIR"
@@ -807,7 +839,7 @@ configure_desktop() {
     install_autostart
 
     if [ "$DESKTOP_TYPE" = "hyprland" ]; then
-        log_success "Hyprland window rules configured"
+        log_success "Hyprland Lua snippet staged (not auto-applied to hyprland.lua)"
     elif [ "$DESKTOP_TYPE" = "gnome" ]; then
         log_success "GNOME cursor helper extension installed"
     elif [ "$DESKTOP_TYPE" = "cosmic" ]; then
@@ -859,10 +891,10 @@ print_success() {
     echo -e "  ${DIM}Status${RESET}   systemctl --user status juhradialmx-daemon"
     echo -e "  ${DIM}Logs${RESET}     journalctl --user -u juhradialmx-daemon -f"
     echo ""
-    echo -e "  ${GRAY}github.com/JuhLabs/juhradial-mx${RESET}"
+    echo -e "  ${GRAY}fork: github.com/notolac/juhradial-mx${RESET}"
+    echo -e "  ${GRAY}original: github.com/JuhLabs/juhradial-mx  (GPL-3)${RESET}"
     echo ""
-    echo -e "  ${CYAN}Enjoying JuhRadial MX?${RESET} Leave a ${YELLOW}★${RESET} on GitHub!"
-    echo -e "  ${DIM}Found a bug? Open an issue - we'd love to hear from you.${RESET}"
+    echo -e "  ${DIM}This is an unofficial fork — not JuhLabs.${RESET}"
     echo ""
 
     # Group-activation race (#52): the daemon cannot touch the mouse until the
@@ -895,6 +927,9 @@ print_success() {
 # ── Main ─────────────────────────────────────────────────────────────
 main() {
     print_banner
+    if [ ! -t 0 ]; then
+        log_warning "stdin is not a TTY. This fork does not recommend curl | bash; clone and run ./install.sh."
+    fi
     check_root
     detect_distro
     check_wayland

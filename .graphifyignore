@@ -1,0 +1,11 @@
+# Skip bulky / generated trees; keep daemon, overlay, packaging, scripts, docs.
+daemon/target/
+site/
+assets/
+juhflow/JuhFlow.dmg
+juhflow/JuhFlow.app/
+overlay/locales/
+.github/
+*.png
+*.svg
+*.gif

@@ -1,0 +1,18 @@
+---
+description: Omarchy 4 / Hyprland 0.56 window rules (Lua only)
+globs: install.sh,packaging/omarchy/**,docs/compositor-support.md,docs/installation.md,docs/troubleshooting.md
+alwaysApply: false
+---
+
+# Omarchy / Hyprland
+
+Omarchy 4 configures Hyprland in **Lua** (`~/.config/hypr/hyprland.lua`). There is no loaded `hyprland.conf`. Hyprland 0.56 **does not accept `windowrulev2`**.
+
+- Versioned snippet: `packaging/omarchy/juhradial-hyprland.lua`
+- Prefer Omarchy `o.window(match, rules)`. Never `windowrulev2`.
+- Match overlay by **title** `^JuhRadial MX$` (do not rename the window in the same pass as the rules).
+- Installer on Omarchy/Lua: copy the snippet to `~/.config/hypr/` and **print** the `dofile` / paste block. Do not edit `hyprland.lua` blindly. Never append `.conf` rules.
+- **Never** edit `/usr/share/omarchy/`.
+- Overlay placement on Wayland uses **XWayland**; do not rewrite the overlay to “fix” it.
+- Apply live config only when the user asks: `hyprctl reload` then `hyprctl configerrors`.
+- After adding the `input` group: logout/reboot. `systemctl --user restart` is not enough.

@@ -2,22 +2,26 @@
 <component type="desktop-application">
   <id>org.juhlabs.JuhRadialMX</id>
 
-  <name>JuhRadial MX</name>
-  <summary>Beautiful radial menu for Logitech MX Master mice on Linux</summary>
+  <name>JuhRadial MX (unofficial fork)</name>
+  <summary>Unofficial fork of JuhRadial MX for Omarchy / learning. Not JuhLabs.</summary>
 
   <developer id="org.juhlabs">
-    <name>JuhLabs (Julian Hermstad)</name>
+    <name>JuhLabs (Julian Hermstad) — original authors; this package is an unofficial fork by notolac</name>
   </developer>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
 
-  <url type="homepage">https://github.com/JuhLabs/juhradial-mx</url>
-  <url type="bugtracker">https://github.com/JuhLabs/juhradial-mx/issues</url>
-  <url type="donation">https://paypal.me/LangbachHermstad</url>
-  <url type="vcs-browser">https://github.com/JuhLabs/juhradial-mx</url>
+  <url type="homepage">https://github.com/notolac/juhradial-mx</url>
+  <url type="bugtracker">https://github.com/notolac/juhradial-mx/issues</url>
+  <url type="vcs-browser">https://github.com/notolac/juhradial-mx</url>
 
   <description>
+    <p>
+      Unofficial personal fork of JuhRadial MX (GPL-3). Original project:
+      https://github.com/JuhLabs/juhradial-mx — JuhLabs / Julian Hermstad and
+      contributors. This build is not JuhLabs and is not Logi Options+.
+    </p>
     <p>
       JuhRadial MX brings a Logi Options+ inspired radial menu experience to Linux.
       Hold the gesture button on your MX Master mouse to open a beautiful glassmorphic
