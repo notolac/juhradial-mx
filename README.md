@@ -2,32 +2,29 @@
   <img src="assets/juhradial-mx.svg" width="128" alt="JuhRadial MX logo">
 </div>
 
+> [!IMPORTANT]
+> **Fork no oficial / unofficial fork.** Este repositorio es el fork personal de [notolac](https://github.com/notolac/juhradial-mx) para **Omarchy 4** y aprendizaje. **No es JuhLabs.** No es Logi Options+. Crédito total y permanente al proyecto original **JuhRadial MX** de [JuhLabs](https://github.com/JuhLabs/juhradial-mx) (Julian Hermstad y contribuidores), licencia [GPL-3.0](LICENSE). Atribución: [NOTICE](NOTICE).
+
 <div align="center">
-  <img src="assets/github/readme-header.png" width="100%" alt="JuhRadial MX">
+  <img src="assets/github/readme-header.png" width="100%" alt="JuhRadial MX (upstream artwork)">
 </div>
 
 <div align="center">
-  <p><strong>Open-source Linux control for Logitech MX Master mice.</strong></p>
-  <p>Get radial actions, button remapping, per-app profiles, MX Master 4 haptics, Easy-Switch, and cross-computer control on Wayland and X11.</p>
+  <p><strong>Open-source Linux control for Logitech MX Master mice</strong> — código de <a href="https://github.com/JuhLabs/juhradial-mx">JuhLabs/juhradial-mx</a>, empaquetado aquí para Omarchy.</p>
+  <p>Radial actions, button remapping, per-app profiles, MX Master 4 haptics, Easy-Switch, and cross-computer control on Wayland and X11.</p>
 
   <p>
-    <a href="https://github.com/JuhLabs/juhradial-mx/releases">
-      <img src="https://img.shields.io/badge/version-0.4.4-cyan.svg" alt="Version 0.4.4">
-    </a>
-    <a href="https://juhlabs.github.io/juhradial-mx/">
-      <img src="https://img.shields.io/badge/docs-juhlabs.github.io-4FEFC9.svg" alt="Documentation">
-    </a>
-    <a href="https://github.com/JuhLabs/juhradial-mx/actions/workflows/ci.yml">
-      <img src="https://github.com/JuhLabs/juhradial-mx/actions/workflows/ci.yml/badge.svg?branch=master" alt="Build Status">
-    </a>
-    <a href="https://www.bestpractices.dev/projects/13701">
-      <img src="https://www.bestpractices.dev/projects/13701/badge" alt="OpenSSF Best Practices">
+    <a href="https://github.com/JuhLabs/juhradial-mx">
+      <img src="https://img.shields.io/badge/upstream-JuhLabs%2Fjuhradial--mx-0A7-9.svg" alt="Upstream: JuhLabs/juhradial-mx">
     </a>
     <a href="LICENSE">
       <img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License: GPL-3.0">
     </a>
-    <a href="https://github.com/JuhLabs/juhradial-mx/stargazers">
-      <img src="https://img.shields.io/github/stars/JuhLabs/juhradial-mx?style=flat&color=yellow" alt="GitHub Stars">
+    <a href="docs/index.md">
+      <img src="https://img.shields.io/badge/docs-docs%2F%20in%20this%20fork-4FEFC9.svg" alt="Docs in this fork">
+    </a>
+    <a href="https://github.com/notolac/juhradial-mx/actions/workflows/ci.yml">
+      <img src="https://github.com/notolac/juhradial-mx/actions/workflows/ci.yml/badge.svg?branch=master" alt="Fork CI">
     </a>
   </p>
 </div>
@@ -51,26 +48,37 @@
 
 ## Installation
 
-The one-line installer supports Fedora/RHEL, Debian/Ubuntu, Arch, and openSUSE families. It previews its changes, requests `sudo` only for package and system paths, then configures the daemon, device permissions, desktop integration, and user service.
+**No uses `curl | bash`.** En este fork el camino recomendado es clonar y ejecutar el script local, o los pasos manuales. El instalador pide confirmación por `/dev/tty` y `sudo` solo en los pasos de sistema.
+
+### Omarchy 4 (este host)
+
+Aún no instales en el sistema hasta que lo pidas explícitamente. Cuando lo hagas:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/JuhLabs/juhradial-mx/master/install.sh | bash
+git clone https://github.com/notolac/juhradial-mx.git
+cd juhradial-mx
+
+# Dependencias (preferido en Omarchy):
+omarchy pkg add rust python-pyqt6 qt6-svg python-gobject gtk4 libadwaita \
+  gtk4-layer-shell python-cryptography dbus systemd-libs libevdev hidapi \
+  ydotool git make base-devel
+
+# Instalador local (usuario normal, no root):
+./install.sh
 ```
 
-Run it as your normal user. See the [installation guide](https://juhlabs.github.io/juhradial-mx/installation/) for requirements and a step-by-step explanation.
+Después: pega el snippet Lua de [`packaging/omarchy/juhradial-hyprland.lua`](packaging/omarchy/juhradial-hyprland.lua) al final de `~/.config/hypr/hyprland.lua` (Hyprland 0.56 **no** usa `windowrulev2`). Si te añadieron al grupo `input`, **cierra sesión o reinicia**; `systemctl --user restart` no basta. Guía: [docs/installation.md](docs/installation.md).
 
 ### Other installation paths
 
 | Path | Command or source |
 |---|---|
-| **Nix package, core app** | `nix run github:JuhLabs/juhradial-mx` |
-| **NixOS module** | Import `juhradial-mx.nixosModules.default`, then configure the user service and `input` group |
-| **Nix development shell** | `nix develop github:JuhLabs/juhradial-mx` |
-| **Build from source** | [Clone the repository](https://github.com/JuhLabs/juhradial-mx.git), build `daemon/` with Cargo, then run `scripts/juhradial-mx.sh` |
-| **Manual distro setup** | Use the [Fedora, Arch, Ubuntu/Debian, or openSUSE instructions](https://juhlabs.github.io/juhradial-mx/installation/#manual-installation-per-distro) |
-| **Experimental distro packaging** | [Arch PKGBUILD](packaging/arch/PKGBUILD), [RPM spec](packaging/rpm/juhradial-mx.spec), and [Flatpak manifest](packaging/org.juhlabs.JuhRadialMX.yaml) |
+| **Build from source (no system install)** | Clone **this fork**, `cd daemon && cargo build --release` |
+| **Manual Arch / Omarchy** | [docs/installation.md](docs/installation.md) |
+| **Upstream Nix / other distros** | Official project: [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx) |
+| **Experimental PKGBUILD** | [packaging/arch/PKGBUILD](packaging/arch/PKGBUILD) — fork metadata, **not** published to AUR |
 
-The distro manifests are packaging starting points, not published or verified release packages. The Nix path covers the core app but does not configure `ydotool`, `uinput`, or JuhFlow dependencies; follow the full guide for those features.
+Upstream also ships RPM and Flatpak starting points. This fork does not publish distro packages. The Nix path is upstream’s; it does not configure `ydotool`, `uinput`, or JuhFlow.
 
 ## Product
 
@@ -126,11 +134,11 @@ JuhRadial MX combines a Rust HID++ daemon, PyQt6 radial overlay, and GTK4/libadw
 | **Quick-access actions** | Open services, files, notes, desktop actions, custom commands, and any installed application (picked from a searchable list, with its real icon) from the wheel. |
 | **Desktop integration** | Wayland-first support across major compositors plus X11, with XWayland used for overlay placement on Wayland. |
 
-Full feature and configuration guides are at [juhlabs.github.io/juhradial-mx](https://juhlabs.github.io/juhradial-mx/).
+Guías de este fork: [docs/index.md](docs/index.md). Wiki oficial del upstream: [juhlabs.github.io/juhradial-mx](https://juhlabs.github.io/juhradial-mx/) (JuhLabs, no este repo).
 
 ## JuhFlow
 
-JuhFlow moves the cursor and clipboard between Linux and macOS over the local network, with no cloud account or relay.
+JuhFlow (upstream) moves the cursor and clipboard between Linux and macOS over the local network. **`juhflow/JuhFlow.dmg` is an upstream binary and is not part of this fork’s Omarchy goal.** Flow stays off by default; do not bind it on the LAN unless you mean to.
 
 <div align="center">
   <a href="https://github.com/JuhLabs/juhradial-mx/raw/master/juhflow/JuhFlow.dmg">
@@ -167,7 +175,7 @@ JuhFlow moves the cursor and clipboard between Linux and macOS over the local ne
 | **niri** | XWayland through `xwayland-satellite` | Supported |
 | **X11** (any desktop) | XQueryPointer with `xdotool` fallback | Supported |
 
-Per-app focus tracking is native on KDE Plasma, Hyprland, and X11. GNOME, COSMIC, Sway, and niri can track XWayland clients, while native Wayland application identification remains compositor-dependent. See [compositor support](https://juhlabs.github.io/juhradial-mx/compositor-support/) for exact behavior.
+Per-app focus tracking is native on KDE Plasma, Hyprland, and X11. GNOME, COSMIC, Sway, and niri can track XWayland clients, while native Wayland application identification remains compositor-dependent. See [compositor support](docs/compositor-support.md). On Omarchy 4 the overlay rules are Lua: [packaging/omarchy/juhradial-hyprland.lua](packaging/omarchy/juhradial-hyprland.lua).
 
 ### Device support
 
@@ -185,7 +193,7 @@ Per-app focus tracking is native on KDE Plasma, Hyprland, and X11. GNOME, COSMIC
 | **Hold** | Press and hold the configured radial-menu button, drag to a segment, then release to execute. On MX Master 4, the Actions Ring button is the default. |
 | **Tap** | Tap the configured radial-menu button, leave the menu open, then click a segment. A second tap closes it. |
 
-Actions and layout are fully configurable in Settings. See the [complete documentation](https://juhlabs.github.io/juhradial-mx/) for profiles, themes, macros, and defaults.
+Actions and layout are fully configurable in Settings. See [docs/](docs/index.md) for profiles, themes, macros, and defaults.
 
 ## Configuration
 
@@ -195,7 +203,7 @@ Configuration is stored in:
 ~/.config/juhradial/config.json
 ```
 
-Use Settings to manage buttons, macros, themes, profiles, device behavior, and JuhFlow. The installer enables the background daemon; enable **Start at Login** in Settings for the overlay. See the [complete documentation](https://juhlabs.github.io/juhradial-mx/) and [compositor support guide](https://juhlabs.github.io/juhradial-mx/compositor-support/) for manual setup, including Hyprland rules.
+Use Settings to manage buttons, macros, themes, profiles, device behavior, and JuhFlow. The installer enables the background daemon; enable **Start at Login** in Settings for the overlay. See [docs/](docs/index.md) and [compositor support](docs/compositor-support.md). On Omarchy, paste the Lua snippet; do not add `windowrulev2` to a `.conf` file that the session never loads.
 
 ## Troubleshooting
 
@@ -205,7 +213,7 @@ Use Settings to manage buttons, macros, themes, profiles, device behavior, and J
 | Menu opens at the top-left | Log out and back in to load the GNOME extension, or run `gnome-extensions enable juhradial-cursor@dev.juhlabs.com`. |
 | Mouse is not detected | Check HID permissions and confirm that the user belongs to the `input` group. |
 | Build fails | Install the required development packages, including `hidapi-devel` and `dbus-devel` on Fedora-family systems. |
-| Menu is hidden on Hyprland | Add the rules from the [compositor support guide](https://juhlabs.github.io/juhradial-mx/compositor-support/). |
+| Menu is hidden on Hyprland | Add the Lua rules from [packaging/omarchy/juhradial-hyprland.lua](packaging/omarchy/juhradial-hyprland.lua) (Omarchy / Hyprland 0.56+). |
 
 Run the daemon directly for verbose diagnostics:
 
@@ -213,7 +221,7 @@ Run the daemon directly for verbose diagnostics:
 ./daemon/target/release/juhradiald --verbose
 ```
 
-See the [troubleshooting guide](https://juhlabs.github.io/juhradial-mx/troubleshooting/) for service, permissions, compositor, and device-specific diagnostics.
+See [docs/troubleshooting.md](docs/troubleshooting.md) for service, permissions, compositor, and device-specific diagnostics.
 
 ## Uninstall
 
@@ -262,7 +270,7 @@ gnome-extensions disable juhradial-cursor@dev.juhlabs.com
 rm -rf ~/.local/share/gnome-shell/extensions/juhradial-cursor@dev.juhlabs.com
 ```
 
-Hyprland users should remove the `JuhRadial MX` rules block added under `~/.config/hypr/`, typically `~/.config/hypr/juhradial-rules.conf` or a section in `hyprland.conf`.
+On Omarchy / Hyprland Lua, remove the `dofile` (or pasted `o.window` block) from `~/.config/hypr/hyprland.lua` and delete `~/.config/hypr/juhradial-hyprland.lua` if present. Do not look for `windowrulev2` in `hyprland.conf` — Omarchy 4 does not load that file.
 
 ## Architecture
 
@@ -282,32 +290,19 @@ Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the devel
 
 ## License
 
-JuhRadial MX is licensed under the [GNU General Public License v3.0](LICENSE).
+Original JuhRadial MX and this fork are licensed under the [GNU General Public License v3.0](LICENSE). See [NOTICE](NOTICE) for attribution.
 
-## Star history
-
-<div align="center">
-  <a href="https://github.com/JuhLabs/juhradial-mx/stargazers">
-    <img alt="Star History Chart" src="assets/github/star-history.svg" width="600">
-  </a>
-</div>
-
-<!-- Chart is rendered weekly by .github/workflows/star-history.yml.
-     GitHub restricts stargazer timestamps to repository admins, so external
-     chart services (star-history.com) can no longer serve public embeds. -->
-
-If JuhRadial MX is useful to you, a star helps other Linux users find the project.
+Star-history charts and “ultimate Logitech experience” marketing belong to **upstream** JuhLabs, not this fork. If the original project is useful, star [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx).
 
 ## Trademark notice
 
-JuhRadial MX is not affiliated with, endorsed by, or associated with Logitech. Logitech, MX Master, Logi Options+, and related names are trademarks of Logitech International S.A. This is an independent, community-built open-source project.
+JuhRadial MX is not affiliated with, endorsed by, or associated with Logitech. Logitech, MX Master, Logi Options+, and related names are trademarks of Logitech International S.A. This fork is also **not** JuhLabs.
 
 <p align="center">
-  Maintained by <a href="https://github.com/JuhLabs">JuhLabs</a>
+  Unofficial fork by <a href="https://github.com/notolac">notolac</a>
+  · original work by <a href="https://github.com/JuhLabs">JuhLabs</a>
   <br><br>
-  <a href="https://github.com/JuhLabs/juhradial-mx/issues">Report a bug</a>
+  <a href="https://github.com/notolac/juhradial-mx/issues">Issues (this fork)</a>
   &nbsp;&middot;&nbsp;
-  <a href="https://github.com/JuhLabs/juhradial-mx/issues">Request a feature</a>
-  &nbsp;&middot;&nbsp;
-  <a href="https://github.com/JuhLabs/juhradial-mx/discussions">Discussions</a>
+  <a href="https://github.com/JuhLabs/juhradial-mx">Upstream</a>
 </p>

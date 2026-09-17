@@ -1,14 +1,13 @@
-site_name: JuhRadial MX
+site_name: JuhRadial MX (unofficial fork)
 site_description: >-
-  The ultimate Logitech MX Master experience on Linux. Radial menu, haptics,
-  button and thumb-wheel remapping, per-app profiles, Easy-Switch, and
-  cross-computer Flow, native on Wayland.
-site_url: https://juhlabs.github.io/juhradial-mx/
-site_author: JuhLabs
-copyright: Copyright &copy; JuhLabs, GPL-3.0
+  Unofficial GPL-3 fork of JuhRadial MX for Omarchy 4 / learning. Not JuhLabs.
+  Original: https://github.com/JuhLabs/juhradial-mx
+site_url: https://github.com/notolac/juhradial-mx
+site_author: notolac (unofficial fork of JuhLabs/juhradial-mx)
+copyright: Original work &copy; JuhLabs (GPL-3.0). This unofficial fork is also GPL-3.0.
 
-repo_url: https://github.com/JuhLabs/juhradial-mx
-repo_name: JuhLabs/juhradial-mx
+repo_url: https://github.com/notolac/juhradial-mx
+repo_name: notolac/juhradial-mx
 edit_uri: edit/master/docs/
 
 theme:

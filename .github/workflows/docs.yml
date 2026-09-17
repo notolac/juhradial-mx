@@ -1,8 +1,16 @@
 name: Docs
 
+# Build-only on this unofficial fork. Do NOT deploy GitHub Pages:
+# that would publish docs as if they were the official JuhLabs wiki.
+
 on:
   push:
     branches: [master]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - ".github/workflows/docs.yml"
+  pull_request:
     paths:
       - "docs/**"
       - "mkdocs.yml"
@@ -13,8 +21,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: docs-build
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -29,19 +37,4 @@ jobs:
           python-version: "3.14"
       - run: pip install --require-hashes -r docs/requirements.txt
       - run: mkdocs build
-      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with:
-          path: site
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+      # Intentionally no actions/upload-pages-artifact or actions/deploy-pages.

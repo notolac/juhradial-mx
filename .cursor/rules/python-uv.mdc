@@ -1,0 +1,11 @@
+---
+description: New Python helpers/tests use uv + Python 3.14 exact pins
+globs: "**/*.py"
+alwaysApply: false
+---
+
+# Python (new code only)
+
+New helpers and tests in this fork: **uv**, **Python 3.14**, direct dependencies pinned with exact `==`, commit `uv.lock`. No bare `pip install`. No version ranges (`>=` / `~=`).
+
+Do **not** migrate `overlay/` (PyQt6 radial menu, GTK4/libadwaita settings via distro `python-pyqt6` / `python-gobject`) to uv unless the user explicitly asks. Those stay on system packages.

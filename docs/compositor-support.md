@@ -1,5 +1,7 @@
 # Compositor & Desktop Support
 
+> **Fork no oficial** de [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx). En Omarchy 4 / Hyprland 0.56 las reglas del overlay son **Lua** (`o.window`), nunca `windowrulev2`. Snippet: [packaging/omarchy/juhradial-hyprland.lua](../packaging/omarchy/juhradial-hyprland.lua).
+
 JuhRadial MX runs natively across the major Linux desktops. Two things have to work for the radial menu to land on your cursor: the daemon has to **find the cursor position** when you press the gesture button, and the overlay window has to **position itself** at that point. Different compositors expose this in different ways, so the daemon picks the most accurate source available for your session.
 
 This page documents how cursor detection works per compositor, what is needed to set each one up, and the known limitations.
@@ -21,7 +23,7 @@ See also: [Installation](installation.md), [Configuration](configuration.md), [T
 | **X11** (any DE) | `XQueryPointer` / `xdotool` | Native X11 | Supported |
 
 !!! note
-    On every Wayland session the overlay relies on **XWayland** for window positioning. Make sure XWayland is installed and running before reporting a positioning bug. The cursor *detection* method varies per compositor, as described below, but the overlay window itself is placed through XWayland on all Wayland desktops.
+    On every Wayland session the overlay relies on **XWayland** for window positioning. Make sure XWayland is installed and running before reporting a positioning bug. Do **not** rewrite the overlay to avoid XWayland; that placement path is intentional. The cursor *detection* method varies per compositor, as described below, but the overlay window itself is placed through XWayland on all Wayland desktops.
 
 
 ---
@@ -128,20 +130,28 @@ Hyprland's per-app tracking reads the `.socket2` event stream and parses `active
 
 ### Setup
 
-The installer detects Hyprland and adds the overlay window rules automatically. To add them manually, put these in `hyprland.conf` (or an included rules file):
+**Omarchy 4 / Hyprland 0.56 (Lua).** `windowrulev2` is ignored or errors. Omarchy does not load `hyprland.conf`. Use the versioned snippet and paste it (or `dofile` it) at the **end** of `~/.config/hypr/hyprland.lua`. Never edit `/usr/share/omarchy/`.
 
-```conf
-# JuhRadial MX overlay window rules
-windowrulev2 = float,    title:^(JuhRadial MX)$
-windowrulev2 = noblur,   title:^(JuhRadial MX)$
-windowrulev2 = noborder, title:^(JuhRadial MX)$
-windowrulev2 = noshadow, title:^(JuhRadial MX)$
-windowrulev2 = pin,      title:^(JuhRadial MX)$
-windowrulev2 = noanim,   title:^(JuhRadial MX)$
+```lua
+-- Unofficial JuhRadial MX fork overlay (Omarchy / Hyprland 0.56+)
+o.window({ title = "^JuhRadial MX$" }, {
+  tag = "-default-opacity",
+  float = true,
+  pin = true,
+  no_blur = true,
+  no_shadow = true,
+  border_size = 0,
+  no_anim = true,
+  opacity = "1 1",
+})
 ```
 
+File in the repo: [packaging/omarchy/juhradial-hyprland.lua](../packaging/omarchy/juhradial-hyprland.lua). After you apply it: `hyprctl reload` then `hyprctl configerrors`. The overlay **window title** stays `JuhRadial MX` so these rules match.
+
+The installer on Omarchy copies that file to `~/.config/hypr/` and prints the `dofile` line. It does **not** append legacy `.conf` rules and does not edit `hyprland.lua` blindly.
+
 !!! tip
-    If the menu is drawn but blurred, bordered, or animated into place, the window rules above are missing. The `float` and `pin` rules are what keep the overlay where the daemon positions it.
+    If the menu is drawn but blurred, bordered, or animated into place, the Lua window rule is missing. `float` and `pin` keep the overlay where the daemon positions it. Omarchy’s default-opacity tag is removed so the wheel stays fully opaque.
 
 
 ---

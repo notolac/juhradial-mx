@@ -1,21 +1,19 @@
 # Security Policy
 
+This repository is **notolac’s unofficial GPL-3 fork** of [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx) for Omarchy / learning. It is not JuhLabs.
+
+- **This fork:** report issues against https://github.com/notolac/juhradial-mx (GitHub Private Vulnerability Reporting if enabled; otherwise a private issue or discussion directed at `@notolac`). Do **not** email `dev@juhlabs.com` about this fork — that address is the **upstream** project’s channel.
+- **Upstream JuhLabs:** has its own policy at https://github.com/JuhLabs/juhradial-mx/security. Vulnerabilities in unmodified upstream code should also be reported there so official users get the fix.
+
+The technical notes below are inherited from upstream and still describe the software.
+
 ## Supported Versions
 
-We release patches for security vulnerabilities for the following versions:
+Security patches in **this fork** follow whatever `master` here carries. There is no separate support matrix for the fork. Upstream’s supported versions (for the official project) are documented in their SECURITY.md.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.4.1   | :white_check_mark: Current release |
-| 0.4.0   | :white_check_mark: |
-| 0.3.x   | :white_check_mark: |
-| 0.2.x   | :white_check_mark: |
-| 0.1.x   | :x: Upgrade required (critical security fixes in 0.2.1+) |
-| < 0.1   | :x:                |
+**Note:** JuhRadial MX is in active development. Prefer the latest `master` of whichever tree you actually run.
 
-**Note:** JuhRadial MX is in active development. Security updates are provided for the latest release on the master branch. Always run the latest version.
-
-### Recent Security Updates
+### Recent Security Updates (upstream history)
 
 **v0.3.0-beta (March 2026):**
 - Atomic profile writes (write-to-tmp + os.replace) prevent config corruption
@@ -41,65 +39,23 @@ We release patches for security vulnerabilities for the following versions:
 
 ## Reporting a Vulnerability
 
-We take the security of JuhRadial MX seriously. If you believe you have found a security vulnerability, please report it to us as described below.
+### This fork (`notolac/juhradial-mx`)
 
-### Preferred Reporting Method: Private Vulnerability Reporting
+**Preferred:** GitHub Private Vulnerability Reporting on this repository.
 
-**GitHub's Private Vulnerability Reporting is the preferred method for security disclosures.**
+1. Go to the [Security tab](https://github.com/notolac/juhradial-mx/security)
+2. Click **Report a vulnerability** (if the maintainer has enabled it)
+3. Include component (daemon, overlay, installer, Hyprland snippet), paths, and reproduction notes
 
-#### How to Enable and Use Private Vulnerability Reporting:
+If private reporting is not enabled, contact `@notolac` through GitHub. Do not file a public issue with exploit details.
 
-1. **Repository Maintainers** (one-time setup):
-   - Navigate to the repository Settings
-   - Go to "Security" → "Code security and analysis"
-   - Under "Private vulnerability reporting", click **Enable**
-   - This allows security researchers to privately report vulnerabilities
+### Upstream (`JuhLabs/juhradial-mx`)
 
-2. **Security Researchers**:
-   - Go to the [Security tab](https://github.com/JuhLabs/juhradial-mx/security)
-   - Click **"Report a vulnerability"**
-   - Fill in the vulnerability details using the private advisory draft
-   - Submit the report
+Upstream’s preferred channel is their [Security tab](https://github.com/JuhLabs/juhradial-mx/security) or the email listed in **their** SECURITY.md (`dev@juhlabs.com`). Use that only for the official project, not for this fork’s packaging/Omarchy changes.
 
-This creates a private security advisory that only you and the maintainers can see until it's published.
+### What to Expect (this fork)
 
-**Benefits:**
-- Secure, encrypted communication
-- Automatic CVE assignment (if eligible)
-- Collaborative fix development
-- Coordinated public disclosure
-
-### Alternative: Email Reporting
-
-If you prefer email or Private Vulnerability Reporting is not available:
-
-- **Email:** dev@juhlabs.com
-- **Subject Line:** `[SECURITY] Brief description of the issue`
-
-**Please include:**
-- Type of issue (e.g., buffer overflow, SQL injection, cross-site scripting, privilege escalation)
-- Affected component(s) (daemon, overlay, specific file/function)
-- Full paths of source file(s) related to the issue
-- Location of the affected source code (tag/branch/commit or direct URL)
-- Step-by-step instructions to reproduce the issue
-- Proof-of-concept or exploit code (if possible)
-- Impact of the issue, including how an attacker might exploit it
-
-### What to Expect
-
-When you report a vulnerability, we commit to:
-
-1. **Acknowledgment:** Within 48 hours of your report
-2. **Initial Assessment:** Within 5 business days, we'll provide:
-   - Confirmation of the issue or request for more information
-   - Our assessment of severity
-   - Estimated timeline for a fix
-3. **Regular Updates:** At least every 7 days on the progress toward a fix
-4. **Resolution:** We aim to release a patch within:
-   - **Critical vulnerabilities:** 7 days
-   - **High severity:** 30 days
-   - **Medium/Low severity:** 90 days
-5. **Credit:** We'll acknowledge your contribution (unless you prefer to remain anonymous)
+This is a personal learning fork. Acknowledgment and fix timelines are **best-effort**, not the upstream SLA. Credit is given unless you ask to stay anonymous.
 
 ## Security Considerations for JuhRadial MX
 
@@ -112,6 +68,10 @@ JuhRadial MX is a Linux desktop application that:
 - **Accesses HID devices** via hidraw (requires udev rules for user access)
 - **Reads configuration** from `~/.config/juhradial/config.json`
 - **Listens to keyboard events** via evdev (F19 key only)
+
+### Extra risk on this fork (Omarchy)
+
+Installing udev rules, adding the user to group `input`, and running `ydotool` **injects keystrokes** via `/dev/uinput`. Flow is off by default; do not bind it on a LAN without an explicit decision. See [AGENTS.md](../AGENTS.md).
 
 ### In-Scope Security Concerns
 
@@ -136,89 +96,13 @@ The following are generally considered out of scope:
 
 ## Dependency Security
 
-### Automated Scanning: Dependabot
-
-**Repository Maintainers** should enable Dependabot for automated dependency updates:
-
-1. Navigate to repository Settings
-2. Go to "Security" → "Code security and analysis"
-3. Enable **Dependabot alerts**
-4. Enable **Dependabot security updates**
-
-This automatically:
-- Scans Rust dependencies (Cargo.toml)
-- Scans Python dependencies (requirements files)
-- Creates pull requests for security updates
-- Provides severity scores and vulnerability details
-
-**Benefit:** Proactive notification and automated fixes for known CVEs in dependencies.
+Enable Dependabot on **this** GitHub repo if you want automated PRs here. Upstream has its own Dependabot on JuhLabs/juhradial-mx.
 
 ## Code Scanning: CodeQL
 
-We use GitHub's CodeQL to automatically scan for security vulnerabilities:
-
-- **Triggers:** Every push to master and all pull requests
-- **Languages:** Python (overlay) and Rust (daemon)
-- **Results:** Available in the [Security tab](https://github.com/JuhLabs/juhradial-mx/security/code-scanning)
-
-CodeQL helps identify:
-- SQL injection (not applicable to this project)
-- Command injection
-- Path traversal
-- Unsafe deserialization
-- Cryptographic weaknesses
-- And 100+ other vulnerability patterns
-
-## Responsible Disclosure Timeline
-
-We follow coordinated vulnerability disclosure practices:
-
-1. **Day 0:** Vulnerability reported privately
-2. **Day 2:** Acknowledgment sent to reporter
-3. **Day 5:** Initial assessment and timeline communicated
-4. **Development:** Fix developed and tested (timeline varies by severity)
-5. **Day X:** Security patch released
-6. **Day X + 7:** Public disclosure and CVE publication (if applicable)
-
-We request that reporters:
-- Give us reasonable time to address the issue before public disclosure
-- Make a good faith effort to avoid privacy violations, data destruction, or service interruption
-- Do not exploit the vulnerability beyond the minimum necessary to demonstrate it
-
-## Security Best Practices for Contributors
-
-If you're contributing code to JuhRadial MX:
-
-- Never commit secrets, API keys, or credentials
-- Use parameterized queries for any database operations
-- Validate and sanitize all user input
-- Use `serde` for safe JSON deserialization in Rust
-- Avoid `unwrap()` in Rust code paths that handle external input
-- Follow principle of least privilege
-- Review the [CONTRIBUTING.md](../CONTRIBUTING.md) for code standards
-
-## Security Tools We Use
-
-- **CodeQL:** Semantic code analysis (see `.github/workflows/codeql.yml`)
-- **Dependabot:** Dependency vulnerability scanning
-- **Cargo audit:** Rust dependency security audit (`cargo audit` in CI)
-- **Clippy:** Rust linting with security-focused rules
+CI may run GitHub CodeQL on this fork (Python overlay + Rust daemon). Results: [Security tab](https://github.com/notolac/juhradial-mx/security/code-scanning). That is not the official JuhLabs scan.
 
 ## Contact
 
-For general security questions or concerns (non-vulnerabilities):
-
-- Open a [GitHub Discussion](https://github.com/JuhLabs/juhradial-mx/discussions)
-- Tag with `security` label
-
-For security vulnerabilities, **always use Private Vulnerability Reporting or direct email** as described above.
-
-## Hall of Fame
-
-We recognize security researchers who have responsibly disclosed vulnerabilities:
-
-*(No vulnerabilities reported yet)*
-
----
-
-**Thank you for helping keep JuhRadial MX and its users safe!**
+- This fork: GitHub on `notolac/juhradial-mx` (not `dev@juhlabs.com`)
+- Upstream product: [JuhLabs security policy](https://github.com/JuhLabs/juhradial-mx/blob/master/.github/SECURITY.md)

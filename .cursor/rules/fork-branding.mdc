@@ -1,0 +1,16 @@
+---
+description: Unofficial fork identity — credit JuhLabs, never impersonate it
+alwaysApply: true
+---
+
+# Fork branding
+
+This repo is **notolac’s unofficial GPL-3 fork** of JuhRadial MX for Omarchy / learning.
+
+- Credit **JuhLabs / JuhRadial MX** (Julian Hermstad and contributors) on user-facing surfaces. Link https://github.com/JuhLabs/juhradial-mx and [LICENSE](LICENSE) / [NOTICE](NOTICE).
+- Do **not** present this fork as JuhLabs, as Logi Options+, or as the official product. No “Maintained by JuhLabs”. No homepage `juhlabs.com` / `juhlabs.github.io` as if it were this fork.
+- Keep the Logitech trademark disclaimer.
+- Do **not** rename D-Bus (`org.kde.juhradialmx`), binaries (`juhradiald`), systemd units, udev rules, or the overlay title `JuhRadial MX` unless the user files an explicit task (Hyprland matches that title).
+- Do not deploy GitHub Pages as the official wiki. Do not publish to AUR.
+- `juhflow/JuhFlow.dmg` is an upstream binary; not part of the Omarchy goal.
+- Do not recommend `curl | bash`.

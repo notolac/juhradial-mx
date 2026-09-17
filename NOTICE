@@ -1,0 +1,34 @@
+NOTICE
+======
+
+This repository is an unofficial personal fork of JuhRadial MX,
+maintained for Omarchy 4 / learning. It is not JuhLabs, not Logitech,
+and not Logi Options+.
+
+Original software
+-----------------
+
+  JuhRadial MX
+  Copyright (C) JuhLabs / Julian Hermstad and contributors
+  https://github.com/JuhLabs/juhradial-mx
+  Licensed under the GNU General Public License v3.0 (see LICENSE).
+
+This fork
+---------
+
+  Maintainer: notolac
+  https://github.com/notolac/juhradial-mx
+  Also licensed under GPL-3.0 (same LICENSE). All derivative work
+  remains GPL-3.
+
+The overlay window title, D-Bus name `org.kde.juhradialmx`, daemon
+binary `juhradiald`, systemd units, and udev rule filenames are kept
+from upstream on purpose (protocol and Hyprland matching). Keeping
+those names is not a claim of official status.
+
+JuhFlow (`juhflow/JuhFlow.dmg` and related macOS sources) is upstream
+companion software. It is not part of this fork's Omarchy goal.
+
+Logitech, MX Master, Logi Options+, and related names are trademarks
+of Logitech International S.A. This project is not affiliated with,
+endorsed by, or associated with Logitech or JuhLabs.

@@ -5,7 +5,7 @@ This page is for contributors. It explains how JuhRadial MX is put together: the
 For installing and using the tool, see [Installation](installation.md) and [Features](features.md). For per-compositor behaviour see [Compositor-Support](compositor-support.md), and for known issues see [Troubleshooting](troubleshooting.md).
 
 !!! note
-    JuhRadial MX is a Linux power tool for the Logitech MX Master 4 and related HID++ mice. It provides a radial gesture menu, haptics, button remapping, scroll and SmartShift control, thumb-wheel horizontal scroll, Easy-Switch host control, macros, and per-app hardware profiles (Flow).
+    JuhRadial MX is a Linux power tool for the Logitech MX Master 4 and related HID++ mice. This tree is an **unofficial fork** ([NOTICE](../NOTICE)); architecture below is upstream’s. D-Bus name `org.kde.juhradialmx` is unchanged on purpose.
 
 
 ## System overview
