@@ -322,11 +322,20 @@ DE_COMMAND_MAP = {
         "lock": ("exec", "loginctl lock-session"),
     },
     "omarchy": {
+        # Native Omarchy 4 commands. playerctl, ibus and hyprlock are not
+        # installed by default, `omarchy launch editor` requires a <path>
+        # argument, and the overlay's built-in "emoji" type falls back to
+        # plasma-emojier/gnome-characters/ibus (none present on Omarchy).
+        # New Note opens Cursor; see docs/configuration.md for the
+        # Obsidian / Notion-web alternatives.
+        "play_pause": ("exec", "omarchy-shell media playPause"),
+        "next_track": ("exec", "omarchy-shell media next"),
+        "prev_track": ("exec", "omarchy-shell media previous"),
         "screenshot": ("exec", "omarchy capture screenshot"),
         "files": ("exec", "omarchy launch nautilus"),
-        "new_note": ("exec", "omarchy launch editor"),
-        "emoji": ("exec", "ibus emoji"),
-        "lock": ("exec", "loginctl lock-session"),
+        "new_note": ("exec", "cursor --new-window"),
+        "emoji": ("exec", "omarchy menu emoji"),
+        "lock": ("exec", "omarchy system lock"),
     },
 }
 
