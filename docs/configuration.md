@@ -243,6 +243,20 @@ Slice `type` values:
 !!! tip
     On first run the slice commands are auto-filled for your desktop environment. For example, the Screenshot slice becomes `spectacle` on KDE, `gnome-screenshot --interactive` on GNOME, `cosmic-screenshot` on COSMIC, and `flameshot gui` on generic desktops. Set `desktop_environment` to pin a specific mapping.
 
+!!! note "Omarchy defaults"
+    On Omarchy the first-run mapping uses native commands (no `playerctl`, `ibus`, or `hyprlock` needed):
+
+    | Slice | Command |
+    | --- | --- |
+    | Play/Pause | `omarchy-shell media playPause` |
+    | Lock | `omarchy system lock` |
+    | Emoji | `omarchy menu emoji` |
+    | New Note | `cursor --new-window` |
+    | Screenshot | `omarchy capture screenshot` |
+    | Files | `omarchy launch nautilus` |
+
+    To point New Note elsewhere, edit its slice `command` in `~/.config/juhradial/config.json` (or the radial editor in Settings): `obsidian` for Obsidian, or `omarchy launch webapp https://notion.so` for Notion as a web app.
+
 ### Submenus
 
 A `submenu`-type slice carries up to four entries under `submenu`, each either a link or an app:

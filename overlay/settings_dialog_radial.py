@@ -201,27 +201,31 @@ class SliceConfigDialog(Adw.Window):
         files_cmd = de_cmds.get("files", ("exec", "xdg-open ~"))
         note_cmd = de_cmds.get("new_note", ("exec", "xdg-open"))
         emoji_cmd = de_cmds.get("emoji", ("exec", "ibus emoji"))
+        play_cmd = de_cmds.get("play_pause", ("exec", "playerctl play-pause"))
+        next_cmd = de_cmds.get("next_track", ("exec", "playerctl next"))
+        prev_cmd = de_cmds.get("prev_track", ("exec", "playerctl previous"))
+        lock_cmd = de_cmds.get("lock", ("exec", "loginctl lock-session"))
         terminal_cmd = detect_terminal()
 
         self.PRESET_ACTIONS = [
             (
                 _("Play/Pause"),
-                "exec",
-                "playerctl play-pause",
+                play_cmd[0],
+                play_cmd[1],
                 "green",
                 "media-playback-start-symbolic",
             ),
             (
                 _("Next Track"),
-                "exec",
-                "playerctl next",
+                next_cmd[0],
+                next_cmd[1],
                 "green",
                 "media-skip-forward-symbolic",
             ),
             (
                 _("Previous Track"),
-                "exec",
-                "playerctl previous",
+                prev_cmd[0],
+                prev_cmd[1],
                 "green",
                 "media-skip-backward-symbolic",
             ),
@@ -249,8 +253,8 @@ class SliceConfigDialog(Adw.Window):
             (_("Screenshot"), screenshot_cmd[0], screenshot_cmd[1], "blue", "camera-photo-symbolic"),
             (
                 _("Lock Screen"),
-                "exec",
-                "loginctl lock-session",
+                lock_cmd[0],
+                lock_cmd[1],
                 "red",
                 "system-lock-screen-symbolic",
             ),
