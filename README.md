@@ -306,3 +306,7 @@ JuhRadial MX is not affiliated with, endorsed by, or associated with Logitech. L
   &nbsp;&middot;&nbsp;
   <a href="https://github.com/JuhLabs/juhradial-mx">Upstream</a>
 </p>
+
+## GitHub security
+
+[Controls, rationale, verification and rollback](docs/github-hardening.md).
