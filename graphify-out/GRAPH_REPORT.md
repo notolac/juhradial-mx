@@ -1,16 +1,16 @@
-# Graph Report - juhradial-mx  (2026-09-20)
+# Graph Report - notolac__juhradial-mx  (2026-11-14)
 
 ## Corpus Check
-- 152 files · ~217,518 words
+- 153 files · ~217,786 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3912 nodes · 7351 edges · 170 communities (153 shown, 15 thin omitted)
+- 3918 nodes · 7357 edges · 191 communities (167 shown, 22 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 187 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `504a20e1`
+- Built from commit: `29809238`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -32,15 +32,15 @@
 - SettingsWindow
 - JuhFlowGUI.swift
 - FlowPage
-- test_juhflow_bridge.py
+- JuhFlowBridge
 - MacrosPage
 - window_tracker.rs
-- MediaStateQuery
+- test_overlay_media.py
 - RadialMenu
 - ActionPalette
 - juhradial-overlay.py
 - HidppDevice
-- keys.py
+- derive_and_store_peer_key
 - FlowServer
 - performance_monitor.rs
 - theme.rs
@@ -48,13 +48,13 @@
 - MacroEditorDialog
 - MacroRecorderDialog
 - config.rs
-- __init__.py
+- FlowDiscoveryMixin
 - ThemeManager
 - FlowEdgeIndicator
 - install.sh
 - SettingsPage
-- themes.py
-- JuhFlowBridge
+- overlay_actions.py
+- ._broadcast
 - Mx4HapticPattern
 - SimulatedMacClient
 - Features
@@ -87,7 +87,7 @@
 - _MenuHarness
 - bundled_themes.rs
 - kwin_scripting.rs
-- Vec
+- Option
 - submenu_from_config
 - test_settings_startup.py
 - theme_contrast.py
@@ -98,8 +98,8 @@
 - TestJuhFlowBridgeMessaging
 - .new
 - Compositor & Desktop Support
-- overlay_constants.py
-- settings_dialogs.py
+- test_hover_gate.py
+- ButtonConfigDialog
 - Troubleshooting
 - Theme
 - FlowPresenceServer
@@ -122,7 +122,7 @@
 - TestJuhFlowBridgeStatusPublication
 - hidraw.rs
 - Architecture
-- _is_user_icon_path
+- load_user_icon
 - ._create_action_row
 - Frequently Asked Questions
 - Contributing to JuhRadial MX
@@ -134,14 +134,15 @@
 - LinuxBridgeClient
 - probe_settings.py
 - serialize_header_encode
-- overlay_actions.py
+- _svg_to_pixmap
 - README.md
 - juhradial-mx.sh
 - test_smartshift_mapping.py
 - ConnectionType
 - ._setup_dnd
-- WheelModeSelector
+- RadialMenuPaintingMixin
 - ciphertext_header_decode
+- settings_flow_discovery.py
 - _Timer
 - Criterion
 - constants.rs
@@ -149,6 +150,7 @@
 - ._create_insert_button
 - render-star-history.py
 - JuhRadialCursorExtension
+- QColor
 - JuhFlow - macOS Companion for JuhRadial MX
 - test_startup_latency.py
 - portal_screenshot.py
@@ -162,11 +164,17 @@
 - juhradiald
 - hypr_logical_rect
 - index.md
+- ._read_direction
 - AGENTS — LLM only
-- start_flow_server
+- overlay_constants.py
+- __init__.py
 - probe_logi.py
+- MediaStateQuery
+- AppPickerDialog
 - [0.3.1-beta] - 2026-03-13
 - [0.4.0] - 2026-06-28
+- actions_use_media_state
+- RadialMenuConfigDialog
 - [0.2.0] - 2025-12-27
 - [0.2.12] - 2026-02-27
 - [0.2.1] - 2026-01-03
@@ -174,6 +182,7 @@
 - [0.2.9] - 2026-02-18
 - [0.3.0-beta] - 2026-03-07
 - [0.3.2-beta] - 2026-03-24
+- ThemePreview
 - [0.2.10] - 2026-02-19
 - [0.2.4] - 2026-02-08
 - [0.2.7] - 2026-02-13
@@ -183,6 +192,18 @@
 - [Unreleased]
 - .remapped_button_cids
 - Omarchy 4 / Hyprland 0.56
+- .start
+- setup_i18n
+- FlowServiceListener
+- GitHub security controls
+- get_flow_server
+- open_settings
+- ._get_bridge_peers
+- .mouseReleaseEvent
+- ._on_media_state_changed
+- ._recompose_nudge
+- ._reposition_cosmic
+- ._tick_animations
 
 ## God Nodes (most connected - your core abstractions)
 1. `JuhRadialService` - 59 edges
@@ -199,27 +220,27 @@
 ## Surprising Connections (you probably didn't know these)
 - `test_second_monitor_center_no_clamp()` --calls--> `map_and_clamp_menu()`  [INFERRED]
   tests/test_kde_placement.py → overlay/overlay_constants.py
+- `test_the_last_column_of_a_fractionally_scaled_monitor_still_matches()` --calls--> `get_monitor_at_cursor()`  [INFERRED]
+  tests/test_hyprland_rotation.py → overlay/overlay_cursor.py
 - `test_restart_requested_after_bounded_stop_replaces_cancelled_start()` --uses--> `ScreenEdgeDetector`  [INFERRED]
   tests/test_flow_edge_polling.py → overlay/flow/edge_detector.py
 - `test_stop_cancels_a_start_blocked_in_config_before_owner_discard()` --uses--> `ScreenEdgeDetector`  [INFERRED]
   tests/test_flow_edge_polling.py → overlay/flow/edge_detector.py
 - `test_stop_deadline_retains_handoff_during_a_blocked_callback()` --uses--> `ScreenEdgeDetector`  [INFERRED]
   tests/test_flow_edge_polling.py → overlay/flow/edge_detector.py
-- `test_stop_fences_a_blocked_edge_check_before_handoff_teardown()` --uses--> `ScreenEdgeDetector`  [INFERRED]
-  tests/test_flow_edge_polling.py → overlay/flow/edge_detector.py
 
 ## Import Cycles
 - 1-file cycle: `daemon/src/hidpp/patterns.rs -> daemon/src/hidpp/patterns.rs`
 
-## Communities (170 total, 15 thin omitted)
+## Communities (191 total, 22 thin omitted)
 
 ### Community 0 - "main.rs"
 Cohesion: 0.05
 Nodes (63): claim_name(), init_dbus_service(), init_dbus_service_with_device(), Arc, Connection, Mutex, Result, SharedBatteryState (+55 more)
 
 ### Community 1 - "settings_dashboard.py"
-Cohesion: 0.05
-Nodes (61): JuhRadial MX - Internationalization (i18n) Module Thin wrapper around Python's…, Reload translations and patch _ in all imported settings modules., reload_language(), detect_logitech_mouse(), _detect_non_logitech_mouse(), disable_scroll_on_scale(), _get_daemon_proxy(), get_device_mode() (+53 more)
+Cohesion: 0.04
+Nodes (78): JuhRadial MX - Internationalization (i18n) Module Thin wrapper around Python's…, Reload translations and patch _ in all imported settings modules., reload_language(), clear_device_mode_cache(), detect_logitech_mouse(), _detect_non_logitech_mouse(), disable_scroll_on_scale(), _get_daemon_proxy() (+70 more)
 
 ### Community 2 - "actions.rs"
 Cohesion: 0.07
@@ -243,7 +264,7 @@ Nodes (34): active_handler(), consecutive_two_axis_frames_emit_final_coordinates
 
 ### Community 7 - "ScreenEdgeDetector"
 Cohesion: 0.05
-Nodes (39): Screen edge cursor monitoring with dwell detection. Polls cursor position and…, Start the polling thread., Claim one queued start after an invalidated reservation clears., Start one reserved poll generation with ``_lifecycle_lock`` held., Wait off the UI thread before replacing a stopping generation., Invalidate callbacks, request stop, and report lifecycle quiescence., Suppress edge detection for ms milliseconds (prevents bounce-back)., Clear edge sample state owned by one polling generation. (+31 more)
+Nodes (44): Screen edge cursor monitoring with dwell detection. Polls cursor position and…, Start the polling thread., Claim one queued start after an invalidated reservation clears., Start one reserved poll generation with ``_lifecycle_lock`` held., Wait off the UI thread before replacing a stopping generation., Invalidate callbacks, request stop, and report lifecycle quiescence., Suppress edge detection for ms milliseconds (prevents bounce-back)., Clear edge sample state owned by one polling generation. (+36 more)
 
 ### Community 8 - "DpiManager"
 Cohesion: 0.07
@@ -255,11 +276,11 @@ Nodes (22): CursorPosition, get_cursor_position(), get_cursor_via_gnome_shell(),
 
 ### Community 10 - "MacroRecorder"
 Cohesion: 0.07
-Nodes (39): new_shared_config(), JuhRadialService, Arc, Mutex, Self, SharedBatteryState, SharedConfig, SharedDeviceName (+31 more)
+Nodes (41): new_shared_config(), JuhRadialService, Arc, Mutex, Self, SharedBatteryState, SharedConfig, SharedDeviceName (+33 more)
 
 ### Community 11 - "HapticManager"
-Cohesion: 0.08
-Nodes (8): HapticManager, Default, Option, Result, Self, String, Vec, HapticPulse
+Cohesion: 0.07
+Nodes (9): ConnectionState, HapticManager, Default, Option, PathBuf, Result, Self, String (+1 more)
 
 ### Community 13 - "FlowHandoffManager"
 Cohesion: 0.08
@@ -270,8 +291,8 @@ Cohesion: 0.20
 Nodes (4): HidppLongMessage, HidppShortMessage, Option, Self
 
 ### Community 15 - "SettingsWindow"
-Cohesion: 0.04
-Nodes (32): clear_device_mode_cache(), Enable or disable minimal mode and save config., Clear the cached device mode so the next get_device_mode() re-reads config., set_minimal_mode(), main(), Clean up all resources on application exit, Show a toast notification, Pause/resume polling timers when window visibility changes. (+24 more)
+Cohesion: 0.05
+Nodes (28): main(), Clean up all resources on application exit, Show a toast notification, Pause/resume polling timers when window visibility changes., Clean up resources when window is closed, Initialize D-Bus connection to daemon, Setup UPower D-Bus signals for instant battery charging updates, Handle UPower property changes - triggers instant battery update (+20 more)
 
 ### Community 16 - "JuhFlowGUI.swift"
 Cohesion: 0.07
@@ -281,9 +302,9 @@ Nodes (40): App, AppKit, Bool, CGFloat, Color, Content, Context, Double (+32 mor
 Cohesion: 0.06
 Nodes (18): FlowPage, Flow multi-computer control settings page, Enable/disable the edge-dependent controls in one place., Handle the cross-screen cursor (Flow master) toggle., Restart the overlay (debounced) so it applies the saved Flow config in its own…, Persist the peer direction and re-apply Flow via the overlay. Only saves config…, Reflect the active direction in the segmented control (no recursion)., Drive direction_dropdown (the authoritative model) from the segments. (+10 more)
 
-### Community 18 - "test_juhflow_bridge.py"
-Cohesion: 0.07
-Nodes (37): build_encrypted_packet(), decrypt_payload(), derive_aes_key(), derive_shared_secret(), encrypt_payload(), parse_encrypted_packet(), Cryptographic primitives for Flow encrypted communication. Uses X25519 key…, Parse Logi-format encrypted packet. Returns (node_id, nonce, tag, ciphertext)… (+29 more)
+### Community 18 - "JuhFlowBridge"
+Cohesion: 0.05
+Nodes (51): Flow protocol constants and configuration, build_encrypted_packet(), decrypt_payload(), derive_aes_key(), derive_shared_secret(), encrypt_payload(), generate_node_id(), generate_x25519_keypair() (+43 more)
 
 ### Community 19 - "MacrosPage"
 Cohesion: 0.08
@@ -293,33 +314,33 @@ Nodes (7): MacrosPage, Macro studio: library + run behaviour + live timeline., S
 Cohesion: 0.10
 Nodes (32): ChildStdout, hyprland_loop(), hyprland_socket2_path(), install_kwin_script(), parse_active_window_id(), parse_wm_class(), read_xprop_class_output(), Child (+24 more)
 
-### Community 21 - "MediaStateQuery"
-Cohesion: 0.08
-Nodes (30): fixture, Refresh the dynamic play/pause glyph without blocking menu input., actions_use_media_state(), MediaStateQuery, Asynchronous media playback-state queries for the overlay., Release a terminal process, then service one deferred request., Run at most one non-blocking ``playerctl status`` query at a time., Start or coalesce a query without overlapping child processes. (+22 more)
+### Community 21 - "test_overlay_media.py"
+Cohesion: 0.14
+Nodes (20): fixture, _Menu, _menu_methods(), _program(), Path, qt_app(), _Query, _radial_menu_method() (+12 more)
 
 ### Community 22 - "RadialMenu"
-Cohesion: 0.07
-Nodes (25): get_configured_language(), Read language from config.json, fallback to 'system'., Initialize gettext with configured or system language. Returns _() function., setup_i18n(), RadialMenu, Log an asynchronous haptic reply and release its watcher., Ambient tick: pulse when the cursor lands on a different monitor. Runs…, Scale the ring window to the monitor it is shown on. Drawing stays in logical… (+17 more)
+Cohesion: 0.11
+Nodes (16): RadialMenu, Log an asynchronous haptic reply and release its watcher., Ambient tick: pulse when the cursor lands on a different monitor. Runs…, Scale the ring window to the monitor it is shown on. Drawing stays in logical…, Set circular window mask on KDE to eliminate rectangular artifact., Handle HideMenu signal - determine tap vs hold based on time elapsed., Handle cursor movement from daemon (relative to menu center)., Complete the close after selection flash - execute action and hide. (+8 more)
 
 ### Community 23 - "ActionPalette"
 Cohesion: 0.07
 Nodes (22): ActionPalette, DelayInputDialog, KeyCaptureDialog, MouseActionDialog, Create a styled palette button with icon and label., Send action to the timeline., Open key capture dialog., Open mouse button selector dialog. (+14 more)
 
 ### Community 24 - "juhradial-overlay.py"
-Cohesion: 0.06
-Nodes (44): Check if cursor is at a screen edge and handle dwell detection., create_tray_icon(), Reposition overlay after XWayland syncs cursor position on COSMIC., Create system tray icon with menu, # NOTE: Cannot import settings_config here - it imports GTK4 (gi), JuhRadial MX - PyQt6 Radial Menu Overlay Listens for MenuRequested signal and…, Block until the X server behind $DISPLAY accepts connections. On a cold boot…, _wait_for_x11() (+36 more)
+Cohesion: 0.07
+Nodes (41): create_tray_icon(), Create system tray icon with menu, # NOTE: Cannot import settings_config here - it imports GTK4 (gi), JuhRadial MX - PyQt6 Radial Menu Overlay Listens for MenuRequested signal and…, Block until the X server behind $DISPLAY accepts connections. On a cold boot…, _wait_for_x11(), get_all_monitors_logical(), get_current_monitor_name() (+33 more)
 
 ### Community 25 - "HidppDevice"
 Cohesion: 0.08
-Nodes (14): HidppDevice, File, HashMap, Option, Path, Result, Self, String (+6 more)
+Nodes (12): HidppDevice, File, HashMap, Path, Result, String, HapticError, Display (+4 more)
 
-### Community 26 - "keys.py"
-Cohesion: 0.08
-Nodes (26): FlowClient, Flow client for connecting to another JuhRadialMX computer, Client for connecting to another JuhRadialMX computer, generate_node_id(), generate_x25519_keypair(), Generate X25519 private key, return (private_key, public_key_bytes_32)., SHA-256 hash of /etc/machine-id -> 32 bytes., delete_peer_key() (+18 more)
+### Community 26 - "derive_and_store_peer_key"
+Cohesion: 0.11
+Nodes (19): Flow client for connecting to another JuhRadialMX computer, delete_peer_key(), derive_and_store_peer_key(), generate_identity(), get_keys_dir(), get_node_id(), get_public_key_hex(), load_peer_key() (+11 more)
 
 ### Community 27 - "FlowServer"
 Cohesion: 0.06
-Nodes (21): get_clipboard(), Clipboard helpers for Flow (supports Wayland and X11), Return whether clipboard sharing is enabled (flow.share_clipboard). Read fresh…, Get clipboard contents (supports Wayland and X11), Set clipboard contents (supports Wayland and X11). Retries on failure since wl-…, Single attempt to set clipboard., set_clipboard(), sharing_enabled() (+13 more)
+Nodes (20): get_clipboard(), Clipboard helpers for Flow (supports Wayland and X11), Return whether clipboard sharing is enabled (flow.share_clipboard). Read fresh…, Get clipboard contents (supports Wayland and X11), Set clipboard contents (supports Wayland and X11). Retries on failure since wl-…, Single attempt to set clipboard., set_clipboard(), sharing_enabled() (+12 more)
 
 ### Community 28 - "performance_monitor.rs"
 Cohesion: 0.11
@@ -330,8 +351,8 @@ Cohesion: 0.09
 Nodes (22): AnimationSettings, default_accent_secondary(), default_error(), default_idle_effect(), default_shadow(), default_success(), default_text_secondary(), default_version() (+14 more)
 
 ### Community 30 - "test_overlay_placement_dpr.py"
-Cohesion: 0.15
-Nodes (29): hyprland_menu_center(), map_and_clamp_menu(), _map_fraction(), map_logical_to_screen(), Map (x, y) from rect ``src`` to rect ``dst`` by fractional position. The…, Menu-center in Qt point space for a Hyprland compositor-logical cursor. Tiered…, Place the menu for a Hyprland logical cursor and clamp it on-screen. Maps the…, Map a compositor-logical cursor coordinate into the matching Qt screen's… (+21 more)
+Cohesion: 0.17
+Nodes (27): hyprland_menu_center(), map_and_clamp_menu(), map_logical_to_screen(), Menu-center in Qt point space for a Hyprland compositor-logical cursor. Tiered…, Place the menu for a Hyprland logical cursor and clamp it on-screen. Maps the…, Map a compositor-logical cursor coordinate into the matching Qt screen's…, _geo(), Regression tests for radial-menu placement under HiDPI / fractional scaling.… (+19 more)
 
 ### Community 31 - "MacroEditorDialog"
 Cohesion: 0.07
@@ -345,37 +366,37 @@ Nodes (13): MacroRecorderDialog, Recording dialog that captures keyboard/mouse e
 Cohesion: 0.08
 Nodes (13): test_action_for_cid(), test_buttons_config_defaults_match_settings_ui(), test_config_serialization(), test_default_config(), test_haptic_config_defaults(), test_haptic_config_slice_debounce_defaults(), test_haptic_disabled_check(), test_haptics_enabled_getter() (+5 more)
 
-### Community 34 - "__init__.py"
-Cohesion: 0.05
-Nodes (30): Flow edge indicator - shows a glowing bar on the screen edge where cursor…, get_flow_server(), get_juhflow_bridge(), get_linked_computers(), get_logi_discovery(), JuhRadialMX Flow - Multi-computer mouse/keyboard sharing Inspired by logitech-…, Re-read config and reposition the flow edge indicator., Stop all Flow servers. (+22 more)
+### Community 34 - "FlowDiscoveryMixin"
+Cohesion: 0.12
+Nodes (12): FlowDiscoveryMixin, Mixin providing network discovery and pairing methods for FlowPage. Expects the…, Scan network for other computers running JuhRadialMX, Get set of IPs of connected JuhFlow bridge peers., Discover other computers on the network running JuhRadialMX, Input Leap, or…, Clean up any active Zeroconf instance, Called when the page is being destroyed or navigated away from, Register this computer as a Flow-compatible service (+4 more)
 
 ### Community 35 - "ThemeManager"
 Cohesion: 0.09
 Nodes (24): HashMap, ThemeManager, Arc, Display, Duration, Formatter, HashSet, Instant (+16 more)
 
 ### Community 36 - "FlowEdgeIndicator"
-Cohesion: 0.05
-Nodes (32): FlowEdgeIndicator, QWidget, Load the flow indicator PNG from assets., Set which edge to show the indicator on and position it., Return the correct pixmap for the current direction., Get geometry of the configured monitor. "" (auto/default) = original cursor-…, Position the widget on the configured screen edge., Disable KDE's screen edge actions for the flow edge. KDE effects (cube,… (+24 more)
+Cohesion: 0.11
+Nodes (10): FlowEdgeIndicator, QWidget, Load the flow indicator PNG from assets., Set which edge to show the indicator on and position it., Return the correct pixmap for the current direction., Get geometry of the configured monitor. "" (auto/default) = original cursor-…, Position the widget on the configured screen edge., Glowing bar indicator on the configured flow edge. (+2 more)
 
 ### Community 37 - "install.sh"
 Cohesion: 0.17
 Nodes (34): build_project(), check_desktop(), check_existing_install(), check_logitech_device(), check_root(), check_wayland(), clone_repo(), configure_desktop() (+26 more)
 
 ### Community 38 - "SettingsPage"
-Cohesion: 0.09
-Nodes (15): _hex_rgb(), General settings page, Handle DE selection change - saves preference., Handle theme selection change - applies to both overlay and settings, Reload CSS with new theme colors, Path to the juhradial-mx launcher, preferring one that exists. Covers the dev…, Live preview card: an Actions Ring rendered in the selected theme's colors, so…, Write the autostart .desktop pointing Exec at exec_path. (+7 more)
+Cohesion: 0.13
+Nodes (11): General settings page, Handle DE selection change - saves preference., Apply DE-specific default commands to radial menu slices., Handle theme selection change - applies to both overlay and settings, Reload CSS with new theme colors, Path to the juhradial-mx launcher, preferring one that exists. Covers the dev…, Write the autostart .desktop pointing Exec at exec_path., Ensure the autostart entry exists and its Exec target is real. Older builds… (+3 more)
 
-### Community 39 - "themes.py"
-Cohesion: 0.12
-Nodes (20): load_radial_image(), Load the 3D radial wheel image for the current theme, if any., load_colors(), Load colors from the current theme with glow color computed, get_colors(), get_radial_image(), get_radial_params(), get_theme() (+12 more)
+### Community 39 - "overlay_actions.py"
+Cohesion: 0.10
+Nodes (27): hex_to_qcolor(), load_minimal_mode(), load_radial_image(), load_theme(), JuhRadial MX - Overlay Actions & Theme Bridge Theme loading, action…, Convert hex color string to QColor, Load theme from config and convert to QColor objects, Read radial.minimal_mode from config.json. Returns bool. (+19 more)
 
-### Community 40 - "JuhFlowBridge"
-Cohesion: 0.08
-Nodes (18): get_presence_server(), JuhFlowBridge, Start the bridge server and discovery broadcaster., Send an edge hit event to all connected JuhFlow peers., Send clipboard content to peers., Request device channel switch on peer., Return list of connected peers., Send message to all connected peers. (+10 more)
+### Community 40 - "._broadcast"
+Cohesion: 0.11
+Nodes (10): get_presence_server(), Send an edge hit event to all connected JuhFlow peers., Send clipboard content to peers., Request device channel switch on peer., Return list of connected peers., Send message to all connected peers., Return peers from both JuhFlow and Logitech presence connections., Publish connected peers atomically, or clear stale disconnected state. (+2 more)
 
 ### Community 41 - "Mx4HapticPattern"
-Cohesion: 0.08
-Nodes (14): ConnectionState, PathBuf, new_shared_haptic_manager(), SharedHapticManager, HapticEvent, HapticPattern, Mx4HapticPattern, PerEventPattern (+6 more)
+Cohesion: 0.09
+Nodes (11): HapticEvent, HapticPattern, HapticPulse, Mx4HapticPattern, PerEventPattern, Default, Display, Formatter (+3 more)
 
 ### Community 42 - "SimulatedMacClient"
 Cohesion: 0.08
@@ -386,8 +407,8 @@ Cohesion: 0.07
 Nodes (29): Available actions, Button & Action Remapping, Easy-Switch, Edge and indicator controls, Feature overview, Features, Gaming Mode, Gaming Mode + Macros (+21 more)
 
 ### Community 44 - "LogiFlowDiscoveryResponder"
-Cohesion: 0.08
-Nodes (16): LogiFlowDiscoveryResponder, Add or update a peer's AES key for encrypted discovery., Remove a peer's AES key., Start listening for discovery requests and broadcasting our presence, Stop listening and broadcasting, Start the UDP listener socket, Start the UDP broadcast sender, Main loop listening for discovery requests (+8 more)
+Cohesion: 0.10
+Nodes (13): LogiFlowDiscoveryResponder, Add or update a peer's AES key for encrypted discovery., Remove a peer's AES key., Stop listening and broadcasting, Main loop listening for discovery requests, Try decrypting with each known peer key. Returns (peer_name, plaintext) or None., Periodically broadcast: encrypted beacons to paired peers, plaintext for…, Build the plaintext discovery announcement packet (includes public key for… (+5 more)
 
 ### Community 45 - "storage.rs"
 Cohesion: 0.19
@@ -406,16 +427,16 @@ Cohesion: 0.08
 Nodes (34): JuhRadial MX - Macro Editor Dialog Full macro editing experience: name,…, JuhRadial MX - Macro Recorder Modal recording dialog with countdown, live event…, delete_macro(), duplicate_macro(), ensure_macros_dir(), get_macros_dir(), load_all_macros(), load_macro() (+26 more)
 
 ### Community 49 - "test_app_icon_picker.py"
-Cohesion: 0.10
-Nodes (23): load_user_icon(), Load a user-imported app icon (absolute .svg/.png/... path) into USER_ICONS,…, command_for_app(), _is_terminal_app(), Return a plain shell command for launching app_info., True for Terminal=true entries (htop, vim, ...): launched directly via Popen…, Resolve app_info's icon to a real image file and cache a copy under the config…, _replace_field_code() (+15 more)
+Cohesion: 0.13
+Nodes (19): command_for_app(), _is_terminal_app(), JuhRadial MX - Application Picker AppPickerDialog lists installed applications…, Return a plain shell command for launching app_info., True for Terminal=true entries (htop, vim, ...): launched directly via Popen…, Resolve app_info's icon to a real image file and cache a copy under the config…, _replace_field_code(), resolve_and_cache_icon() (+11 more)
 
 ### Community 50 - "ButtonsPage"
 Cohesion: 0.10
 Nodes (15): translate_radial_label(), ButtonsPage, Create a premium styled button assignment row, Buttons configuration page - Premium UI Design, Handle button configuration click, Refresh the button action labels after config change, Get the current radial menu slices from config, Create a compact slice row widget (+7 more)
 
 ### Community 51 - "SliceConfigDialog"
-Cohesion: 0.10
-Nodes (11): AppPickerDialog, Dialog listing installed applications, like a desktop menu's app list., Double-click / Enter on a row picks it immediately., Dialog for configuring a single radial menu slice, Apply a preset action, Handle action type change, Show/hide command entry based on action type, Render a submenu row as pointing at an app: read-only display text. (+3 more)
+Cohesion: 0.16
+Nodes (8): Dialog for configuring a single radial menu slice, Apply a preset action, Handle action type change, Show/hide command entry based on action type, Render a submenu row as pointing at an app: read-only display text., Handle color selection - ensure exactly one is selected, Save the slice configuration, SliceConfigDialog
 
 ### Community 52 - "HapticsPage"
 Cohesion: 0.13
@@ -427,7 +448,7 @@ Nodes (21): get_system_themes_dir(), get_user_themes_dir(), Display, Formatter, 
 
 ### Community 54 - "ApplicationProfilesGridDialog"
 Cohesion: 0.10
-Nodes (14): find_radial_action_index(), Toggle grid view for application profiles, ApplicationProfilesGridDialog, AppProfileSlicesDialog, Grid view dialog for per-application profiles, Load profiles dict from profiles.json, Save profiles dict to profiles.json atomically, Create a card widget for one app profile (+6 more)
+Nodes (14): Toggle grid view for application profiles, ApplicationProfilesGridDialog, AppProfileSlicesDialog, Grid view dialog for per-application profiles, Load profiles dict from profiles.json, Save profiles dict to profiles.json atomically, Create a card widget for one app profile, Remove one app profile (+6 more)
 
 ### Community 55 - "MacroTimeline"
 Cohesion: 0.14
@@ -442,16 +463,16 @@ Cohesion: 0.13
 Nodes (11): default_repeat_count(), default_standard_delay(), default_use_standard_delay(), events_to_actions(), MacroConfig, RawAction, Option, String (+3 more)
 
 ### Community 58 - "_log"
-Cohesion: 0.14
-Nodes (10): QWidget, Premium loading splash for JuhRadial MX startup., Mark app loading as done. Splash stays until min time + daemon ready., SplashScreen, _log(), Write debug message to log file (stdout may be /dev/null)., get_kde_monitors_logical(), _parse_kscreen_json() (+2 more)
+Cohesion: 0.17
+Nodes (8): QWidget, Premium loading splash for JuhRadial MX startup., Mark app loading as done. Splash stays until min time + daemon ready., SplashScreen, _log(), Write debug message to log file (stdout may be /dev/null)., get_kde_monitors_logical(), KDE logical monitor rects via kscreen-doctor, cached with a short TTL. Returns…
 
 ### Community 59 - "compositor.rs"
 Cohesion: 0.13
 Nodes (13): AtomicU64, clones_share_one_flag(), cursor_backend(), CursorBackend, KWinAvailability, KWinScripting, owner_loss_and_recovery_update_state(), Arc (+5 more)
 
 ### Community 60 - "ConfigManager"
-Cohesion: 0.06
-Nodes (29): ConfigManager, detect_terminal(), Set callback for showing toast notifications, Show toast if callback is set, Load config from file or return defaults. On first run (de_defaults_applied is…, Reload config from disk - useful when settings window reopens, Deep merge loaded config with defaults, Recursively update base dict with updates (+21 more)
+Cohesion: 0.09
+Nodes (17): ConfigManager, detect_terminal(), Set callback for showing toast notifications, Show toast if callback is set, Load config from file or return defaults. On first run (de_defaults_applied is…, Reload config from disk - useful when settings window reopens, Deep merge loaded config with defaults, Recursively update base dict with updates (+9 more)
 
 ### Community 61 - "triggers.rs"
 Cohesion: 0.12
@@ -474,8 +495,8 @@ Cohesion: 0.18
 Nodes (14): battery_status_label(), decode_battery(), decode_dpi(), decode_host(), decode_ratchet(), decode_wireless_status(), HardwareNotification, NotificationIndices (+6 more)
 
 ### Community 66 - "ScrollPage"
-Cohesion: 0.06
-Nodes (20): Sensitivity settings - pointer, scroll wheel, and thumb wheel. Layout matches…, Handle wheel mode change from segmented control., Map Easy 1% -> Hard 100% to automatic thresholds 1..49. Threshold 0 selects…, Map automatic thresholds 1..49 back to Easy/Hard percent., Switch to spin button for manual sensitivity entry., Enter pressed - apply and switch back to label., Focus lost - apply and switch back to label., Live update slider as user changes spin value. (+12 more)
+Cohesion: 0.05
+Nodes (23): 3-mode segmented control: Ratchet / SmartShift / Free-spin. Matches the Logi…, Set active mode without triggering callback., Sensitivity settings - pointer, scroll wheel, and thumb wheel. Layout matches…, Handle wheel mode change from segmented control., Map Easy 1% -> Hard 100% to automatic thresholds 1..49. Threshold 0 selects…, Map automatic thresholds 1..49 back to Easy/Hard percent., Switch to spin button for manual sensitivity entry., Enter pressed - apply and switch back to label. (+15 more)
 
 ### Community 68 - "juhflow_app.py"
 Cohesion: 0.10
@@ -497,9 +518,9 @@ Nodes (15): BundledThemeInfo, get_bundled_theme(), get_bundled_theme_info(), get
 Cohesion: 0.20
 Nodes (15): trigger_kwin_cursor_script(), Call, cursor_script_uses_native_load_run_and_unload_calls(), dispatched_run_error_suppresses_handler_fallback_and_still_cleans_up(), kwin_peer(), rejected_load_preserves_pre_dispatch_handler_fallback(), Arc, Connection (+7 more)
 
-### Community 73 - "Vec"
-Cohesion: 0.18
-Nodes (12): batch_divert_scans_controls_once_and_returns_only_successful_cids(), batch_divert_skips_io_for_an_empty_request(), batch_divert_stops_when_control_count_is_unavailable(), ButtonDivertIo, control_response(), count_response(), MockButtonDivertIo, Request (+4 more)
+### Community 73 - "Option"
+Cohesion: 0.16
+Nodes (14): batch_divert_scans_controls_once_and_returns_only_successful_cids(), batch_divert_skips_io_for_an_empty_request(), batch_divert_stops_when_control_count_is_unavailable(), ButtonDivertIo, control_response(), count_response(), MockButtonDivertIo, Request (+6 more)
 
 ### Community 74 - "submenu_from_config"
 Cohesion: 0.19
@@ -541,13 +562,13 @@ Nodes (9): HidrawError, Display, Formatter, Path, Result, Self, Sender, test_hid
 Cohesion: 0.08
 Nodes (25): Compositor & Desktop Support, COSMIC, Cursor positioning, Cursor positioning, GNOME (Wayland), How cursor detection works, How the daemon and overlay detect your session, Hyprland (+17 more)
 
-### Community 84 - "overlay_constants.py"
-Cohesion: 0.13
-Nodes (20): _bounding_box(), _clamp_center(), hover_gate(), hover_is_armed(), JuhRadial MX - Overlay Constants Geometry constants, DE detection flags, and…, Clamp a window center so a ``half``-radius window stays inside ``rect``. All…, Union bounding box of a list of {x, y, width, height} rects., Return the (logical_rect, qt_rect) pair to map between, mirroring the tiers of… (+12 more)
+### Community 84 - "test_hover_gate.py"
+Cohesion: 0.20
+Nodes (13): hover_gate(), hover_is_armed(), True once the pointer has moved clear of `anchor`, an (dx, dy) pair. Offsets…, Whether `source` may highlight a slice yet, updating its anchor state.…, Radial menu opening with an option already selected (issue #60). The menu…, test_a_source_stays_armed_once_it_has_moved(), test_deliberate_move_arms(), test_diagonal_jitter_uses_euclidean_distance() (+5 more)
 
-### Community 85 - "settings_dialogs.py"
-Cohesion: 0.09
-Nodes (14): Open button configuration dialog for generic mouse buttons, Open button configuration dialog, Refresh UI after dialog closes, ButtonConfigDialog, _group_label(), Dialog for configuring a mouse button action, JuhRadial MX - Button Configuration Dialog ButtonConfigDialog for configuring…, Handle row click - update checkmark and selection (+6 more)
+### Community 85 - "ButtonConfigDialog"
+Cohesion: 0.14
+Nodes (9): Open button configuration dialog for generic mouse buttons, Open button configuration dialog, Refresh UI after dialog closes, ButtonConfigDialog, _group_label(), Dialog for configuring a mouse button action, JuhRadial MX - Button Configuration Dialog ButtonConfigDialog for configuring…, Handle row click - update checkmark and selection (+1 more)
 
 ### Community 86 - "Troubleshooting"
 Cohesion: 0.08
@@ -578,8 +599,8 @@ Cohesion: 0.23
 Nodes (5): FlowRequestHandler, BaseHTTPRequestHandler, Strip newlines and control characters to prevent log injection., HTTP request handler for Flow server, _sanitize_log()
 
 ### Community 93 - "test_kde_placement.py"
-Cohesion: 0.27
-Nodes (9): find_monitor_at(), Return the monitor rect containing (x, y), else None., _kscreen_doc(), KDE Wayland second-monitor drift regression (KWin-logical vs Qt space). Real…, test_find_monitor_at_boundaries(), test_main_monitor_identity(), test_parse_kscreen_json_scale_and_rotation(), test_second_monitor_center_no_clamp() (+1 more)
+Cohesion: 0.21
+Nodes (11): find_monitor_at(), _parse_kscreen_json(), Parse `kscreen-doctor -o --json` output into logical monitor rects. The output…, Return the monitor rect containing (x, y), else None., _kscreen_doc(), KDE Wayland second-monitor drift regression (KWin-logical vs Qt space). Real…, test_find_monitor_at_boundaries(), test_main_monitor_identity() (+3 more)
 
 ### Community 94 - "AddApplicationDialog"
 Cohesion: 0.16
@@ -633,9 +654,9 @@ Nodes (6): long_report_with_0x41_index_is_not_a_connection_notification(), recei
 Cohesion: 0.09
 Nodes (23): Architecture, Build, test, run, Button divert and CIDs, Configuration and file layout, D-Bus interface, Device discovery, Feature enumeration, Features used (+15 more)
 
-### Community 108 - "_is_user_icon_path"
-Cohesion: 0.33
-Nodes (6): _is_user_icon_path(), load_actions_from_config(), Return a screenshot exec command suited to the current desktop. KDE keeps its…, Load radial menu actions from config file, Plain filesystem check - safe to call at import time, unlike load_user_icon()…, resolve_screenshot_command()
+### Community 108 - "load_user_icon"
+Cohesion: 0.18
+Nodes (11): _is_user_icon_path(), load_actions_from_config(), load_user_icon(), Return a screenshot exec command suited to the current desktop. KDE keeps its…, Load radial menu actions from config file, Plain filesystem check - safe to call at import time, unlike load_user_icon()…, Load a user-imported app icon (absolute .svg/.png/... path) into USER_ICONS,…, resolve_screenshot_command() (+3 more)
 
 ### Community 109 - "._create_action_row"
 Cohesion: 0.22
@@ -681,13 +702,13 @@ Nodes (7): connect(), find_socket(), query(), Probe Logi Options+ agent for sens
 Cohesion: 0.39
 Nodes (5): Encode a thekogans SerializableHeader. Format: SizeT(strlen) + type_string +…, Decode a SerializableHeader from data. Returns (type_name, version,…, serialize_header_decode(), serialize_header_encode(), TestSerializableHeader
 
-### Community 120 - "overlay_actions.py"
-Cohesion: 0.12
-Nodes (20): _get_assets_dir(), hex_to_qcolor(), load_ai_icons(), load_minimal_mode(), load_os_icons(), load_theme(), open_settings(), JuhRadial MX - Overlay Actions & Theme Bridge Theme loading, action… (+12 more)
+### Community 120 - "_svg_to_pixmap"
+Cohesion: 0.29
+Nodes (8): _get_assets_dir(), load_ai_icons(), load_os_icons(), Get the assets directory, searching dev and installed paths., Pre-render SVG to QPixmap at fixed size (avoids huge buffer allocations)., Load SVG icons for AI submenu items (pre-rendered to QPixmap)., Load SVG icons for OS Easy-Switch submenu items (pre-rendered to QPixmap)., _svg_to_pixmap()
 
 ### Community 121 - "README.md"
-Cohesion: 0.11
-Nodes (18): Architecture, Capabilities, Compatibility, Configuration, Contributing, Desktop and compositor support, Device support, Installation (+10 more)
+Cohesion: 0.10
+Nodes (19): Architecture, Capabilities, Compatibility, Configuration, Contributing, Desktop and compositor support, Device support, GitHub security (+11 more)
 
 ### Community 122 - "juhradial-mx.sh"
 Cohesion: 0.46
@@ -705,13 +726,17 @@ Nodes (4): ConnectionType, Display, Formatter, Result
 Cohesion: 0.29
 Nodes (3): Set up drag-and-drop for reordering., Visual feedback when drag starts., Handle drop - reorder actions.
 
-### Community 126 - "WheelModeSelector"
-Cohesion: 0.29
-Nodes (3): 3-mode segmented control: Ratchet / SmartShift / Free-spin. Matches the Logi…, Set active mode without triggering callback., WheelModeSelector
+### Community 126 - "RadialMenuPaintingMixin"
+Cohesion: 0.14
+Nodes (10): RadialMenuPaintingMixin, JuhRadial MX - Overlay Painting Mixin All drawing/rendering methods for the…, OutBack easing - slight overshoot then settle, creates 'droplet' feel., OutExpo easing - very fast start, long elegant settle., Per-slice entrance progress during the open bloom. Slices sweep in clockwise:…, Draw submenu items with droplet pop-out animation., Draw a badge shape centered at (x,y), oriented radially outward., Draw an icon on the 3D radial image with per-theme badge shape. (+2 more)
 
 ### Community 127 - "ciphertext_header_decode"
 Cohesion: 0.33
 Nodes (5): ciphertext_header_decode(), ciphertext_header_encode(), Encode a CiphertextHeader (8 bytes, big-endian)., Decode a CiphertextHeader. Returns (iv_len, ct_len, mac_len)., TestCiphertextHeader
+
+### Community 128 - "settings_flow_discovery.py"
+Cohesion: 0.19
+Nodes (6): FlowClient, Client for connecting to another JuhRadialMX computer, get_linked_computers(), get_logi_discovery(), JuhRadial MX - Flow Discovery & Pairing FlowServiceListener (mDNS) and…, Complete the pairing process with another computer
 
 ### Community 130 - "Criterion"
 Cohesion: 0.70
@@ -729,6 +754,10 @@ Nodes (3): Box, Create the '+' button between rows for inserting actions., Inser
 Cohesion: 0.60
 Nodes (4): fetch_star_dates(), main(), Render the repository star-history chart to assets/github/star-history.svg.…, render()
 
+### Community 136 - "QColor"
+Cohesion: 0.19
+Nodes (7): Draw subtle glow + indicator image with breathing opacity., OutCubic easing - fast start, smooth deceleration., Draw a translucent highlight on a slice for 3D mode, scaled by progress., Draw a white flash overlay on a slice for selection feedback., Draw a circular white flash on an icon for minimal mode selection feedback., Draw a floating icon without slice background (vector minimal mode)., QColor
+
 ### Community 137 - "JuhFlow - macOS Companion for JuhRadial MX"
 Cohesion: 0.11
 Nodes (17): Architecture, Building the SwiftUI GUI (macOS only), Channel Mapping (Julian's Setup), Connection, Device IDs, Files, Flow Indicator (flow_indicator.py), Frame Format (Receive) (+9 more)
@@ -742,24 +771,40 @@ Cohesion: 0.12
 Nodes (16): [0.1.0] - 2025-12-20, [0.2.11] - 2026-02-19, [0.2.2] - 2026-01-06, [0.2.3] - 2026-01-06, [0.2.6] - 2026-02-13, [0.2.8] - 2026-02-14, [0.4.2] - 2026-08-14, Added (+8 more)
 
 ### Community 149 - "hypr_logical_rect"
-Cohesion: 0.16
-Nodes (17): get_current_monitor_name(), get_monitor_at_cursor(), hypr_logical_rect(), _hypr_logical_size(), Logical-pixel rect {x, y, width, height, name} for a hyprctl monitor., Find which monitor contains the given global cursor coordinates. Returns dict…, Return the name of the monitor containing (x, y), or None. Mirrors the…, Logical (post-rotation, post-scale) size of a `hyprctl monitors -j` entry.… (+9 more)
+Cohesion: 0.26
+Nodes (11): hypr_logical_rect(), Logical-pixel rect {x, y, width, height, name} for a hyprctl monitor., Hyprland portrait-monitor menu drift (issue #78). `hyprctl monitors -j` reports…, test_flipped_rotations_swap_too(), test_fractional_scale_still_truncates(), test_lower_half_of_the_portrait_monitor_is_not_clamped_to_the_bottom(), test_menu_lands_on_the_cursor_on_the_portrait_monitor(), test_missing_transform_field_behaves_as_unrotated() (+3 more)
 
 ### Community 150 - "index.md"
 Cohesion: 0.45
 Nodes (4): A look at it, Explore, Instalación (este fork), What is new in v0.4.4
 
+### Community 151 - "._read_direction"
+Cohesion: 0.21
+Nodes (6): Disable KDE's screen edge actions for the flow edge. KDE effects (cube,…, Restore all KDE screen edge actions that were suppressed., Fade in the indicator., Fade out the indicator., Poll bridge for connected peers., Read flow config: direction, hide_indicator, monitor.
+
 ### Community 152 - "AGENTS — LLM only"
 Cohesion: 0.20
 Nodes (10): AGENTS — LLM only, Destructive / security, Graphify, How not to install (yet), How to build (dev, no system install), If you update this file later, RULES (this file), Source of truth map (use this first) (+2 more)
 
-### Community 154 - "start_flow_server"
-Cohesion: 0.14
-Nodes (11): _on_peer_key(), Callback when a new peer key is derived during pairing (server-side)., Start the global Flow server and Logi Options+ compatibility layer, start_flow_server(), get_all_peers(), Load all peer keys. Returns dict of {name: peer_data}., LogiFlowServer, HTTPServer (+3 more)
+### Community 153 - "overlay_constants.py"
+Cohesion: 0.18
+Nodes (11): _bounding_box(), _clamp_center(), compute_ring_scale(), _map_fraction(), JuhRadial MX - Overlay Constants Geometry constants, DE detection flags, and…, Map (x, y) from rect ``src`` to rect ``dst`` by fractional position. The…, Clamp a window center so a ``half``-radius window stays inside ``rect``. All…, Union bounding box of a list of {x, y, width, height} rects. (+3 more)
+
+### Community 154 - "__init__.py"
+Cohesion: 0.10
+Nodes (18): Flow edge indicator - shows a glowing bar on the screen edge where cursor…, get_juhflow_bridge(), _on_peer_key(), JuhRadialMX Flow - Multi-computer mouse/keyboard sharing Inspired by logitech-…, Re-read config and reposition the flow edge indicator., Stop all Flow servers., Callback when a new peer key is derived during pairing (server-side)., Start the global Flow server and Logi Options+ compatibility layer (+10 more)
 
 ### Community 155 - "probe_logi.py"
 Cohesion: 0.43
 Nodes (7): connect(), find_socket(), query(), Probe Logi Options+ agent to find correct change_host payload format., read_frame(), recv_json(), send_json()
+
+### Community 156 - "MediaStateQuery"
+Cohesion: 0.27
+Nodes (5): MediaStateQuery, Release a terminal process, then service one deferred request., Run at most one non-blocking ``playerctl status`` query at a time., Start or coalesce a query without overlapping child processes., QObject
+
+### Community 157 - "AppPickerDialog"
+Cohesion: 0.22
+Nodes (3): AppPickerDialog, Dialog listing installed applications, like a desktop menu's app list., Double-click / Enter on a row picks it immediately.
 
 ### Community 158 - "[0.3.1-beta] - 2026-03-13"
 Cohesion: 0.40
@@ -768,6 +813,14 @@ Nodes (5): [0.3.1-beta] - 2026-03-13, Added, Changed, Fixed, Security
 ### Community 159 - "[0.4.0] - 2026-06-28"
 Cohesion: 0.40
 Nodes (5): [0.4.0] - 2026-06-28, Added, Changed, Fixed, Security
+
+### Community 160 - "actions_use_media_state"
+Cohesion: 0.29
+Nodes (5): Refresh the dynamic play/pause glyph without blocking menu input., actions_use_media_state(), Asynchronous media playback-state queries for the overlay., Return whether an action tree renders the dynamic play/pause icon., test_media_icon_detection_covers_main_actions_and_submenus()
+
+### Community 161 - "RadialMenuConfigDialog"
+Cohesion: 0.33
+Nodes (4): RadialMenuConfigDialog, Load the current radial menu from config, Save the radial menu configuration via ConfigManager, Dialog for configuring the radial menu slices
 
 ### Community 162 - "[0.2.0] - 2025-12-27"
 Cohesion: 0.50
@@ -797,6 +850,10 @@ Nodes (4): [0.3.0-beta] - 2026-03-07, Added, Changed, Fixed
 Cohesion: 0.50
 Nodes (4): [0.3.2-beta] - 2026-03-24, Added, Changed, Fixed
 
+### Community 169 - "ThemePreview"
+Cohesion: 0.38
+Nodes (3): _hex_rgb(), Live preview card: an Actions Ring rendered in the selected theme's colors, so…, ThemePreview
+
 ### Community 170 - "[0.2.10] - 2026-02-19"
 Cohesion: 0.67
 Nodes (3): [0.2.10] - 2026-02-19, Changed, Fixed
@@ -825,24 +882,44 @@ Nodes (3): [0.4.4] - 2026-08-18, Changed, Fixed
 Cohesion: 0.67
 Nodes (3): Added, Fixed, [Unreleased]
 
+### Community 179 - ".start"
+Cohesion: 0.33
+Nodes (3): Start listening for discovery requests and broadcasting our presence, Start the UDP listener socket, Start the UDP broadcast sender
+
+### Community 180 - "setup_i18n"
+Cohesion: 0.33
+Nodes (5): get_configured_language(), Read language from config.json, fallback to 'system'., Initialize gettext with configured or system language. Returns _() function., setup_i18n(), Reload translations immediately when settings changes language.
+
+### Community 182 - "GitHub security controls"
+Cohesion: 0.40
+Nodes (4): GitHub security controls, Limits and rollback, Verified server changes, Workflow changes and verification
+
+### Community 183 - "get_flow_server"
+Cohesion: 0.40
+Nodes (3): get_flow_server(), Handle click on Link button to pair with another computer, Show a dialog to pair with another computer
+
+### Community 184 - "open_settings"
+Cohesion: 0.40
+Nodes (5): open_settings(), Keep the legacy relaunch only outside KDE Plasma. KDE Plasma reliably presents…, Launch or refocus the settings dashboard. KDE's single-instance activation…, _requires_settings_relaunch(), test_kde_settings_launch_activates_without_process_checks()
+
 ## Knowledge Gaps
-- **249 isolated node(s):** `juhradiald`, `SwiftUI`, `AppKit`, `.body`, `.linuxOffset` (+244 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1481 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **253 isolated node(s):** `juhradiald`, `SwiftUI`, `AppKit`, `.body`, `.linuxOffset` (+248 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1485 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `_Error` connect `_Error` to `Config`, `actions.rs`, `profiles.rs`, `ThemeManager`, `EvdevHandler`, `DpiManager`, `MacroRecorder`, `storage.rs`, `.new`, `.new`, `ActionPalette`, `HidppDevice`, `KWinScriptError`?**
-  _High betweenness centrality (0.466) - this node is a cross-community bridge._
+  _High betweenness centrality (0.465) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `MacrosPage` (e.g. with `SettingsWindow` and `MacroEditorDialog`) actually correct?**
   _`MacrosPage` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `juhradiald`, `SwiftUI`, `AppKit` to the rest of the system?**
-  _249 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _253 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `main.rs` be split into smaller, more focused modules?**
   _Cohesion score 0.0531883632089333 - nodes in this community are weakly interconnected._
 - **Should `settings_dashboard.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.0466916354556804 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.037886510363574585 - nodes in this community are weakly interconnected._
 - **Should `actions.rs` be split into smaller, more focused modules?**
   _Cohesion score 0.06519114688128773 - nodes in this community are weakly interconnected._
 - **Should `profiles.rs` be split into smaller, more focused modules?**
