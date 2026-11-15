@@ -1,6 +1,6 @@
 # AGENTS — LLM only
 
-**Last modified:** 2026-09-17 (unofficial Omarchy 4 fork bootstrap: branding, Hyprland Lua snippet, no host install)
+**Last modified:** 2026-11-15
 
 Human intro: [README.md](README.md).  
 Original project (full credit): [JuhLabs/juhradial-mx](https://github.com/JuhLabs/juhradial-mx).  
@@ -12,6 +12,8 @@ This repository is an **unofficial GPL-3 fork** of JuhRadial MX for **Omarchy 4 
 ---
 
 ## RULES (this file)
+
+- Public documentation must stand alone: never name or link private repositories, internal hosts, access reviews, or operational gaps. Keep administrative audit records outside this repository.
 
 - **RULE:** Show **last modified** date at top; bump when you change this file.
 - **RULE:** Write **English** only here. Human docs may be Spanish. **Match the language of the file you edit.**
@@ -34,7 +36,7 @@ This repository is an **unofficial GPL-3 fork** of JuhRadial MX for **Omarchy 4 
 
 ## What this repo is (real)
 
-A Linux desktop app: Rust HID++ daemon + PyQt6 radial overlay + GTK4 settings. This fork’s extra goal is **Omarchy 4 / Hyprland 0.56 packaging and window-rule integration**, not a homelab inventory.
+A Linux desktop app: Rust HID++ daemon + PyQt6 radial overlay + GTK4 settings. This fork’s extra goal is **Omarchy 4 / Hyprland 0.56 packaging and window-rule integration**.
 
 | Tree | Role | Touch in Omarchy pass? |
 |------|------|------------------------|
@@ -137,4 +139,4 @@ git fetch upstream
 - Keep English.
 - Stay concise; prefer links.
 - Bump the date line.
-- Only document observed facts. This is not the homelab repo.
+- Only document observed repository facts.
