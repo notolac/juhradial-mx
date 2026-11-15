@@ -15,4 +15,5 @@ jobs:
     permissions:
       contents: write
     steps:
-      - run: echo "Disabled on the notolac fork. Upstream: JuhLabs/juhradial-mx"
+      - run: |
+          echo "Disabled on the notolac fork. Upstream: JuhLabs/juhradial-mx"
